@@ -33,14 +33,16 @@ class ProductoDetailSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     marca_nombre = serializers.ReadOnlyField(source='marca.nombre')
     categoria_nombre = serializers.ReadOnlyField(source='categoria.nombre')
+    categoria_id = serializers.ReadOnlyField(source='categoria.id')  # 👈 necesario para recomendaciones
     precios = PrecioSerializer(many=True, read_only=True)
-    imagen_url = serializers.SerializerMethodField()  # 👈 nuevo campo
+    imagen_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Producto
         fields = [
             'id', 'codigo', 'codigo_fabricante', 'nombre', 'descripcion',
-            'marca_nombre', 'categoria_nombre', 'precios', 'imagen_url'
+            'marca_nombre', 'categoria_nombre', 'categoria_id',  # 👈 lo agregamos aquí
+            'precios', 'imagen_url'
         ]
         
     def get_imagen_url(self, obj):

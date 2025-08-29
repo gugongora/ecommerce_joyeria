@@ -1,25 +1,35 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
+{% load custom_filters %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto px-4 py-10">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+<div class="max-w-6xl mx-auto px-4 py-10">
 
-    <!-- Imagen del producto (si llega por la API en el futuro) -->
-    <div>
-      <img src="{% static 'images/no-image.jpg' %}" alt="{{ product.nombre }}" class="w-full h-auto rounded-lg shadow-md object-cover">
-    </div>
-
+  <!-- Bloque principal: imagen e info -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white border border-gray-200 rounded-lg shadow p-6">
+    
+    <!-- Imagen del producto -->
+<div class="relative w-full pt-[100%] overflow-hidden rounded-lg shadow-md">
+  <img src="{{ product.imagen_url|default:'/static/images/no-image.jpg' }}" 
+       alt="{{ product.nombre }}" 
+       class="absolute top-0 left-0 w-full h-full object-cover">
+</div>  
     <!-- Información del producto -->
     <div>
-      <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ product.nombre }}</h1>
-      <p class="text-gray-700 text-lg mb-2">Código: {{ product.codigo }}</p>
-      <p class="text-gray-700 text-lg mb-2">Marca: {{ product.marca_nombre }}</p>
-      <p class="text-gray-700 text-lg mb-2">Categoría: {{ product.categoria_nombre }}</p>
+      <h1 class="text-3xl font-bold text-[#5e0013] mb-4">{{ product.nombre }}</h1>
+      <p class="text-gray-600 text-lg mb-1"><strong>Código:</strong> {{ product.codigo }}</p>
+      <p class="text-gray-600 text-lg mb-1"><strong>Marca:</strong> {{ product.marca_nombre }}</p>
+      <p class="text-gray-600 text-lg mb-4"><strong>Categoría:</strong> {{ product.categoria_nombre }}</p>
+
+      {% if product.descripcion %}
+        <p class="text-gray-700 mb-6 leading-relaxed">{{ product.descripcion }}</p>
+      {% endif %}
 
       {% if product.precios %}
-        <p class="text-2xl text-emerald-600 font-semibold mb-6">
-          ${{ product.precios.0.valor }}
+        <p class="text-2xl text-[#BD6A5C] font-semibold mb-6">
+          {{ product.precios.0.valor|clp_format }}
+
         </p>
       {% else %}
         <p class="text-red-600 mb-6">Sin precio disponible</p>
@@ -28,16 +38,40 @@
       <div class="flex flex-col sm:flex-row gap-4">
         <form action="{% url 'cart:add_to_cart' product.id|default_if_none:0 %}" method="post">
           {% csrf_token %}
-          <button type="submit" class="w-full bg-[#BD6A5C] hover:bg-[#D6B79E] text-white font-medium py-2 px-6 rounded transition">
+          <button type="submit" class="w-full bg-[#5e0013] hover:bg-[#83041e] text-white font-medium py-2 px-6 rounded transition">
             Agregar al carrito
           </button>
         </form>
-        <a href="{% url 'store:product_list' %}" class="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded border border-gray-300 transition">
+        <a href="{% url 'store:catalogo_productos' %}" class="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded border border-gray-300 transition">
           Volver al catálogo
         </a>
       </div>
     </div>
-
   </div>
+
+  <!-- Productos recomendados -->
+  {% if productos_recomendados %}
+    <div class="mt-16">
+      <h2 class="text-2xl font-semibold mb-6 text-center text-[#5e0013]">También te puede interesar</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {% for p in productos_recomendados %}
+          <div class="bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition overflow-hidden">
+            <a href="{% url 'store:product_detail' p.id %}">
+              <img src="{{ p.imagen_url|default:'/static/images/no-image.jpg' }}" alt="{{ p.nombre }}" class="w-full h-56 object-cover">
+              <div class="p-4">
+                <h3 class="text-lg font-semibold text-gray-800">{{ p.nombre }}</h3>
+                <p class="text-gray-500 text-sm mb-2">{{ p.categoria_nombre }}</p>
+                {% if p.precio_actual %}
+                  <p class="text-[#BD6A5C] font-semibold text-base">{{ p.precio_actual|clp_format }}</p>
+                {% else %}
+                  <p class="text-red-500 text-sm">Sin precio</p>
+                {% endif %}
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
 </div>
 {% endblock %}

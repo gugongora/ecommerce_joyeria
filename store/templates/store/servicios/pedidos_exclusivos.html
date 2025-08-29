@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-white py-20 px-4">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12">
+    
+    <!-- Texto explicativo -->
+    <div class="flex flex-col justify-center">
+      <h2 class="text-4xl font-bold text-[#5e0013] mb-4">Pedidos Exclusivos</h2>
+      <p class="text-gray-700 mb-4">
+        ¿Tienes una idea única para una joya? Nuestro maestro orfebre puede diseñarla especialmente para ti. Desde anillos personalizados hasta colgantes con significado especial, creamos piezas que reflejan tu historia.
+      </p>
+      <p class="text-gray-700 mb-4">
+        Puedes enviarnos tu idea, dibujos o referencias. Te guiaremos en el proceso de selección de materiales, diseño y presupuesto.
+      </p>
+      <ul class="text-gray-700 space-y-2">
+        <li>✔️ Diseños 100% personalizados</li>
+        <li>✔️ Asesoría directa con el orfebre</li>
+        <li>✔️ Seguimiento del proceso</li>
+      </ul>
+
+      <!-- Botón de contacto directo -->
+<a href="{% url 'store:contacto' %}?mensaje=Hola, me gustaría hacer un pedido exclusivo de joyería personalizada. ¿Podemos conversar?"
+   class="mt-6 bg-[#5e0013] text-white px-6 py-3 rounded hover:bg-[#83041e] transition w-max">
+  Solicitar Pedido Personalizado
+</a>
+
+    </div>
+
+    <!-- Imagen o galería de ejemplos -->
+    <div class="flex items-center justify-center">
+      <img src="{% static 'images/pedidos-exclusivos.jpg' %}" alt="Joyas personalizadas"
+           class="rounded-lg shadow-lg w-full max-w-md object-cover">
+    </div>
+  </div>
+
+  <!-- Galería adicional opcional -->
+  <div class="mt-16 max-w-6xl mx-auto">
+    <h3 class="text-2xl font-semibold text-center text-[#5e0013] mb-6">Ejemplos de pedidos anteriores</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 px-4">
+      <img src="{% static 'images/joya1.jpg' %}" class="rounded shadow object-cover w-full h-60">
+      <img src="{% static 'images/joya2.jpg' %}" class="rounded shadow object-cover w-full h-60">
+      <img src="{% static 'images/joya3.jpg' %}" class="rounded shadow object-cover w-full h-60">
+    </div>
+  </div>
+</section>
+{% endblock %}

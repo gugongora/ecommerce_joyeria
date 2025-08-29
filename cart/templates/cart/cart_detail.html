@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <div class="flex flex-col md:flex-row gap-8">
@@ -62,7 +63,7 @@
               </a>
             </div>
 
-            <p class="text-sm text-gray-500 mt-1">Subtotal: ${{ item.subtotal }}</p>
+            <p class="text-sm text-gray-500 mt-1">Subtotal: {{ item.subtotal|clp_format }}</p>
           </div>
 
         </li>
@@ -70,7 +71,7 @@
       </ul>
 
       <p class="text-lg font-semibold text-right text-[#BD6A5C] mb-6">
-        Total: ${{ total }}
+        Total: {{ total|clp_format }}
       </p>
 
       <form method="post" action="{% url 'orders:checkout' %}">

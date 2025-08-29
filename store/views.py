@@ -7,7 +7,14 @@ import json
 from django.http import Http404
 from utils.api import build_api_url
 from django.conf import settings
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.utils.http import urlencode
+
+from django.core.paginator import Paginator
+from django.conf import settings
+
+
+
 
 
 # Función para verificar si el usuario pertenece al grupo 'personal_interno'
@@ -34,16 +41,38 @@ def product_list(request):
 
     return render(request, 'store/product_list.html', context)
 
-# Vista para detalle de producto desde API externa
+
 def product_detail(request, product_id):
     url = build_api_url(f'productos/{product_id}')
     response = requests.get(url)
-    if response.status_code == 200:
-        product_data = response.json()
-        product_data['id'] = product_id
-        return render(request, 'store/product_detail.html', {'product': product_data})
-    else:
+
+    if response.status_code != 200:
         return render(request, 'store/product_detail.html', {'product': None})
+
+    product_data = response.json()
+    product_data['id'] = product_id
+    categoria_id = product_data.get('categoria_id') or product_data.get('categoria')  # puede ser nombre o ID
+
+    print(f"📦 ID de categoría: {categoria_id}")
+
+    productos_recomendados = []
+    if categoria_id:
+        recomendados_url = build_api_url(f'productos/?categoria={categoria_id}')
+        recomendados_response = requests.get(recomendados_url)
+        if recomendados_response.status_code == 200:
+            response_data = recomendados_response.json()
+            productos = response_data.get('results', [])  # ✅ corregido para paginación
+            productos_recomendados = [p for p in productos if str(p.get('id')) != str(product_id)][:6]
+
+    print("🧪 Productos recomendados:")
+    for p in productos_recomendados:
+        print("-", p)
+
+    return render(request, 'store/product_detail.html', {
+        'product': product_data,
+        'productos_recomendados': productos_recomendados
+    })
+
 
 # Vista para búsqueda de productos por nombre
 def search(request):
@@ -168,3 +197,84 @@ def dashboard_interno(request):
 
 def quienes_somos(request):
     return render(request, 'store/quienes_somos.html')
+
+def contacto(request):
+    return render(request, 'store/contacto.html')
+
+
+from utils.api import build_api_url
+
+def catalogo_productos(request):
+    # Filtros desde GET
+    categoria_id = request.GET.get('categoria')
+    marca_id = request.GET.get('marca')
+    orden = request.GET.get('orden')
+    rango_precio = request.GET.get('rango_precio')
+    page_number = request.GET.get('page', 1)
+
+    # Interpretar rango de precio
+    precio_min, precio_max = None, None
+    if rango_precio == "1":
+        precio_max = 10000
+    elif rango_precio == "2":
+        precio_min = 10001
+        precio_max = 40000
+    elif rango_precio == "3":
+        precio_min = 40001
+        precio_max = 80000
+    elif rango_precio == "4":
+        precio_min = 80001
+
+    # Construir parámetros
+    params = {}
+    if categoria_id:
+        params['categoria'] = categoria_id
+    if marca_id:
+        params['marca'] = marca_id
+    if precio_min is not None:
+        params['precio_min'] = precio_min
+    if precio_max is not None:
+        params['precio_max'] = precio_max
+    if orden:
+        params['orden'] = orden
+
+    # Consumir API
+    url = build_api_url('productos/', params)
+    response = requests.get(url)
+    productos = response.json().get('results', []) if response.status_code == 200 else []
+
+    paginator = Paginator(productos, 12)
+    page_obj = paginator.get_page(page_number)
+
+    # Obtener categorías y marcas
+    categorias_resp = requests.get(build_api_url('categorias/'))
+    marcas_resp = requests.get(build_api_url('marcas/'))
+    categorias = categorias_resp.json().get('results', []) if categorias_resp.status_code == 200 else []
+    marcas = marcas_resp.json().get('results', []) if marcas_resp.status_code == 200 else []
+
+    context = {
+        'page_obj': page_obj,
+        'categorias': categorias,
+        'marcas': marcas,
+    }
+
+    return render(request, 'store/catalogo.html', context)
+
+def pedidos_exclusivos(request):
+    return render(request, 'store/servicios/pedidos_exclusivos.html')
+
+
+def argollas_matrimonio(request):
+    return render(request, 'store/servicios/argollas_matrimonio.html')
+
+def argollas_compromiso(request):
+    return render(request, 'store/servicios/argollas_compromiso.html')
+
+def reparaciones(request):
+    return render(request, 'store/servicios/reparaciones.html')
+
+def mantenimiento_relojeria(request):
+    return render(request, 'store/servicios/mantenimiento_relojeria.html')
+
+def contacto(request):
+    return render(request, 'store/contacto.html')

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block content %}
+
+<form method="get" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+
+  <!-- Categoría -->
+  <select name="categoria" class="border rounded px-3 py-2">
+    <option value="">Todas las categorías</option>
+    {% for c in categorias %}
+      <option value="{{ c.id }}" {% if request.GET.categoria == c.id|stringformat:"s" %}selected{% endif %}>{{ c.nombre }}</option>
+    {% endfor %}
+  </select>
+
+  <!-- Marca -->
+  <select name="marca" class="border rounded px-3 py-2">
+    <option value="">Todas las marcas</option>
+    {% for m in marcas %}
+      <option value="{{ m.id }}" {% if request.GET.marca == m.id|stringformat:"s" %}selected{% endif %}>{{ m.nombre }}</option>
+    {% endfor %}
+  </select>
+  
+<!-- Rango de Precio (por rangos predefinidos) -->
+<select name="rango_precio" class="border rounded px-3 py-2">
+  <option value="">Todos los precios</option>
+  <option value="1" {% if request.GET.rango_precio == "1" %}selected{% endif %}>Hasta $10.000</option>
+  <option value="2" {% if request.GET.rango_precio == "2" %}selected{% endif %}>$10.001 - $40.000</option>
+  <option value="3" {% if request.GET.rango_precio == "3" %}selected{% endif %}>$40.001 - $80.000</option>
+  <option value="4" {% if request.GET.rango_precio == "4" %}selected{% endif %}>Sobre $80.000</option>
+</select>
+
+  <!-- Ordenar por -->
+  <select name="orden" class="border rounded px-3 py-2">
+    <option value="">Ordenar por</option>
+    <option value="precio_asc" {% if request.GET.orden == "precio_asc" %}selected{% endif %}>Precio: menor a mayor</option>
+    <option value="precio_desc" {% if request.GET.orden == "precio_desc" %}selected{% endif %}>Precio: mayor a menor</option>
+    <option value="nombre_asc" {% if request.GET.orden == "nombre_asc" %}selected{% endif %}>Nombre: A-Z</option>
+    <option value="nombre_desc" {% if request.GET.orden == "nombre_desc" %}selected{% endif %}>Nombre: Z-A</option>
+  </select>
+
+  <div class="col-span-full">
+    <button type="submit" class="bg-[#5e0013] text-white px-4 py-2 rounded">Aplicar filtros</button>
+  </div>
+</form>
+
+
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+  <h2 class="text-2xl font-semibold mb-6 text-gray-800 text-center">Catálogo de Productos</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for producto in page_obj %}
+      <div class="border rounded-lg shadow hover:shadow-md transition overflow-hidden">
+        <a href="{% url 'store:product_detail' producto.id %}">
+          <img src="{{ producto.imagen_url|default:'/static/images/no-image.jpg' }}" alt="{{ producto.nombre }}" class="w-full aspect-square object-cover">
+          <div class="p-4">
+            <h3 class="text-lg font-semibold text-gray-800">{{ producto.nombre }}</h3>
+            <p class="text-gray-500 text-sm mb-2">{{ producto.categoria_nombre }}</p>
+            {% if producto.precio_actual %}
+              <p class="text-emerald-600 font-semibold">{{ producto.precio_actual|clp_format}}</p>
+            {% else %}
+              <p class="text-red-500 text-sm">Sin precio</p>
+            {% endif %}
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+
+  
+{% comment %} Preservar filtros al cambiar de página {% endcomment %}
+{% with request.GET.urlencode as current_query %}
+  {% if current_query %}
+    {% with '&'|add:current_query as extra_query %}
+    {% endwith %}
+  {% else %}
+    {% with '' as extra_query %}
+    {% endwith %}
+  {% endif %}
+{% endwith %}
+
+
+<!-- Paginación -->
+<div class="flex justify-center mt-8 space-x-2">
+  {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{{ extra_query }}" class="px-3 py-1 border rounded hover:bg-gray-100">&laquo;</a>
+  {% endif %}
+
+  {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+      <span class="px-3 py-1 bg-[#5e0013] text-white rounded">{{ num }}</span>
+    {% elif num > page_obj.number|add:-3 and num < page_obj.number|add:3 %}
+      <a href="?page={{ num }}{{ extra_query }}" class="px-3 py-1 border rounded hover:bg-gray-100">{{ num }}</a>
+    {% endif %}
+  {% endfor %}
+
+  {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{{ extra_query }}" class="px-3 py-1 border rounded hover:bg-gray-100">&raquo;</a>
+  {% endif %}
+</div>
+
+{% endblock %}

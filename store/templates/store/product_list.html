@@ -210,7 +210,7 @@
     <div>
       <i class="fas fa-box-open text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Presentación con Historia</h4>
-      <p>Cada pieza se entrega en estuche de madera, acompañada de su certificado artesanal.</p>
+      <p>Cada pieza se entrega en estuche o caja.</p>
     </div>
 
     <!-- Garantía -->
@@ -268,7 +268,9 @@
             <img src="${imageSrc}" alt="${product.nombre}" class="w-full h-40 object-cover rounded mb-3">
             <h3 class="text-base font-semibold text-gray-800 mb-1">${product.nombre}</h3>
             <p class="text-sm text-gray-600 mb-2">${product.descripcion?.slice(0, 60) || ''}</p>
-            <p class="text-lg font-bold text-gray-900 mb-3">$${precio}</p>
+            <p class="text-lg font-bold text-gray-900 mb-3">
+              ${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0 }).format(precio)}
+            </p>
             <div class="flex flex-col gap-2">
               <a href="/store/producto/${product.id}/" 
                  class="text-center border border-black text-black hover:bg-black hover:text-white font-medium py-1.5 rounded">

@@ -1,8 +1,9 @@
 {% load static %}
-{% load cart_tags %}
 {% load humanize %}
+{% load cart_tags %}
 {% load user_groups %}
 {% load cart_extras %}
+{% load custom_filters %}
 {% load tailwind_tags %}
 
 <!DOCTYPE html>
@@ -90,27 +91,77 @@
   </nav>
 
 <!-- Menú secundario fijo debajo del navbar -->
-<div class="bg-[#83041e] text-white text-sm py-2 text-center space-x-7 fixed top-[64px] w-full z-50 shadow">
-  <!-- Home -->
-  <a href="{% url 'store:product_list' %}"
-     class="pb-2 border-b-2 transition-all duration-300 {% if not request.GET.categoria %}border-white{% else %}border-transparent hover:border-white{% endif %}">
-    Home
-  </a>
+<div class="bg-[#83041e] text-white text-sm py-2 text-center fixed top-[64px] w-full z-50 shadow">
+  <div class="flex justify-center space-x-7 relative">
 
-  <!-- Categorías -->
-  {% for categoria in categorias_api %}
-    <a href="{% url 'store:product_list' %}?categoria={{ categoria.id }}"
-       class="pb-2 border-b-2 transition-all duration-300 {% if request.GET.categoria == categoria.id|stringformat:'s' %}border-white{% else %}border-transparent hover:border-white{% endif %}">
-      {{ categoria.nombre }}
+    <!-- Home -->
+    <a href="{% url 'store:product_list' %}"
+       class="pb-2 border-b-2 transition-all duration-300 {% if not request.GET.categoria %}border-white{% else %}border-transparent hover:border-white{% endif %}">
+      Home
     </a>
-  {% endfor %}
 
-  <!-- Botón Conversor -->
-  <button class="pb-2 border-b-2 border-transparent hover:border-white transition-all duration-300"
-          data-modal-target="dollarModal">
-    Conversor USD → CLP
-  </button>
+<!-- Productos con submenú -->
+<div class="relative" id="menu-productos">
+  <div id="btn-productos"
+       class="inline-block pb-2 border-b-2 border-transparent transition-all duration-300 cursor-pointer">
+    <a href="{% url 'store:catalogo_productos' %}" class="inline-block text-white">Productos</a>
+  </div>
+
+  <div id="submenu-productos"
+       class="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white text-[#83041e] rounded shadow-lg py-2 w-40
+              opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+    {% for categoria in categorias_api %}
+      <a href="{% url 'store:product_list' %}?categoria={{ categoria.id }}"
+         class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
+        {{ categoria.nombre }}
+      </a>
+    {% endfor %}
+  </div>
 </div>
+
+<!-- Servicios con submenú -->
+<div class="relative" id="menu-servicios">
+  <div id="btn-servicios"
+       class="inline-block pb-2 border-b-2 border-transparent transition-all duration-300 text-white cursor-pointer">
+    Servicios
+  </div>
+
+  <div id="submenu-servicios"
+       class="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white text-[#83041e] rounded shadow-lg py-2 w-52
+              opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+    <a href="{% url 'store:pedidos_exclusivos' %}"
+       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
+      Pedidos exclusivos
+    </a>
+    <a href="{% url 'store:argollas_matrimonio' %}"
+       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
+      Argollas de matrimonio
+    </a>
+    <a href="{% url 'store:argollas_compromiso' %}"
+       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
+      Argollas de compromiso
+    </a>
+    <a href="{% url 'store:reparaciones' %}"
+       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
+      Reparaciones
+    </a>
+    <a href="{% url 'store:mantenimiento_relojeria' %}"
+       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
+      Mantención relojería
+    </a>
+  </div>
+</div>
+
+<!-- Contacto -->
+<a href="{% url 'store:contacto' %}"
+   class="pb-2 border-b-2 border-transparent hover:border-white transition-all duration-300 text-white">
+  Contacto
+</a>
+
+
+  </div>
+</div>
+
 
 </header>
 
@@ -185,7 +236,7 @@
 {% endif %}
                       <div>
                         <p class="font-semibold text-sm leading-tight">{{ product.nombre }}</p>
-                        <p class="text-gray-700 text-sm">${{ product.precio_actual|intcomma }}</p>
+                        <p class="text-gray-700 text-sm">{{ product.precio_actual|clp_format }}</p>
                         <p class="text-xs text-gray-500">Cantidad: {{ quantity }}</p>
                       </div>
                     </div>
@@ -206,7 +257,7 @@
       {% cart_total as cart_total_value %}
       <div class="flex justify-between font-semibold text-gray-800 text-sm mb-4">
         <span>SUBTOTAL:</span>
-        <span>${{ cart_total_value|intcomma }}</span>
+        <span>{{ cart_total_value|clp_format }}</span>
       </div>
       <a href="{% url 'cart:view_cart' %}" class="block text-center bg-[#5e0013] hover:bg-[#7f1d1d] text-white py-2 px-4 rounded transition">
         Ver Carrito
@@ -272,9 +323,9 @@
       <!-- Contacto -->
       <div>
         <h3 class="font-bold uppercase mb-3">Contacto</h3>
-        <p>Osorno, Región de Los Lagos</p>
+        <p>Viña del Mar, Región de Valparaíso</p>
         <p>+56 9 9614 0632</p>
-        <p>gongorajoyas@gmail.com</p>
+        <p>gongorajoyeria@gmail.com</p>
       </div>
 
       <!-- Información -->
@@ -469,6 +520,56 @@ function closeCart() {
       });
   }
 </script>
+<script>
+  function manejarSubmenu(botonId, submenuId, contenedorId, otrosSubmenus = []) {
+    const boton = document.getElementById(botonId);
+    const submenu = document.getElementById(submenuId);
+    const contenedor = document.getElementById(contenedorId);
+    let timeout;
+
+    contenedor.addEventListener('mouseenter', () => {
+      clearTimeout(timeout);
+      
+      // Mostrar el submenu actual
+      submenu.classList.remove('opacity-0', 'pointer-events-none');
+      submenu.classList.add('opacity-100', 'pointer-events-auto');
+
+      // Ocultar los otros submenus
+      otrosSubmenus.forEach(id => {
+        const otro = document.getElementById(id);
+        if (otro) {
+          otro.classList.add('opacity-0', 'pointer-events-none');
+          otro.classList.remove('opacity-100', 'pointer-events-auto');
+        }
+      });
+    });
+
+    contenedor.addEventListener('mouseleave', () => {
+      timeout = setTimeout(() => {
+        submenu.classList.add('opacity-0', 'pointer-events-none');
+        submenu.classList.remove('opacity-100', 'pointer-events-auto');
+      }, 200);
+    });
+  }
+
+  manejarSubmenu(
+    'btn-productos',
+    'submenu-productos',
+    'menu-productos',
+    ['submenu-servicios']  // Submenú que se debe cerrar si este se abre
+  );
+
+  manejarSubmenu(
+    'btn-servicios',
+    'submenu-servicios',
+    'menu-servicios',
+    ['submenu-productos']  // Submenú que se debe cerrar si este se abre
+  );
+</script>
+
+
+
+
 
   
 </body>

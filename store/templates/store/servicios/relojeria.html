@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-white py-20 px-4">
+  <div class="max-w-7xl mx-auto space-y-20">
+
+    <!-- Presentación del servicio -->
+    <div class="grid md:grid-cols-2 gap-12">
+      <div class="flex flex-col justify-center">
+        <h2 class="text-4xl font-bold text-[#5e0013] mb-4">Mantención de Relojería</h2>
+        <p class="text-gray-700 mb-4">
+          En <strong>Góngora Joyería</strong> contamos con un servicio técnico especializado para todo tipo de relojes: análogos, digitales, automáticos y relojes antiguos como cucús o de pared. Mantenemos y reparamos tu reloj para que siga marcando cada momento con precisión.
+        </p>
+        <p class="text-gray-700 mb-4">Realizamos:</p>
+        <ul class="list-disc list-inside text-gray-700 space-y-1 mb-4">
+          <li><strong>Limpieza completa</strong> de maquinaria y caja</li>
+          <li><strong>Mantención preventiva</strong> para prolongar la vida útil del reloj</li>
+          <li><strong>Reparación de mecanismos</strong> dañados o detenidos</li>
+          <li><strong>Cambio de cristal</strong> (vidrio protector)</li>
+          <li><strong>Revisión y ajuste de relojes automáticos</strong></li>
+          <li><strong>Calibración de hora</strong> y ajuste de manecillas</li>
+          <li><strong>Relojes cucú o de pared</strong>: limpieza interna, afinación y sincronización</li>
+          <li><strong>Cambio de pila y correa</strong></li>
+        </ul>
+
+        <a href="{% url 'store:contacto' %}?mensaje=Hola, necesito mantenimiento o reparación para mi reloj. ¿Pueden ayudarme?"
+           class="mt-6 bg-[#5e0013] text-white px-6 py-3 rounded hover:bg-[#83041e] transition w-max">
+          Solicitar mantención
+        </a>
+      </div>
+
+      <!-- Imagen principal -->
+      <div>
+        <img src="{% static 'images/relojeria-principal.jpg' %}" alt="Servicio de Relojería"
+             class="rounded-lg shadow-lg w-full object-cover">
+      </div>
+    </div>
+
+    <!-- Galería de trabajos -->
+    <div>
+      <h3 class="text-2xl font-semibold text-[#5e0013] text-center mb-8">Algunos trabajos realizados</h3>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <img src="{% static 'images/reloj1.jpg' %}" alt="Cambio de cristal" class="rounded-lg shadow">
+        <img src="{% static 'images/reloj2.jpg' %}" alt="Limpieza de maquinaria" class="rounded-lg shadow">
+        <img src="{% static 'images/reloj3.jpg' %}" alt="Reloj cucú restaurado" class="rounded-lg shadow">
+      </div>
+    </div>
+
+    <!-- Formulario WhatsApp -->
+    <div class="bg-gray-100 p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+      <h3 class="text-xl font-bold text-center text-[#5e0013] mb-6">Consulta por tu reloj</h3>
+      <form id="whatsappForm" novalidate>
+        <div class="mb-4">
+          <label for="nombre" class="block text-gray-700 font-semibold mb-1">Nombre</label>
+          <input type="text" id="nombre" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#5e0013]" placeholder="Ej: Luis Torres">
+        </div>
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-semibold mb-1">Correo electrónico</label>
+          <input type="email" id="email" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#5e0013]" placeholder="Ej: ltorres@email.com">
+        </div>
+        <div class="mb-4">
+          <label for="mensaje" class="block text-gray-700 font-semibold mb-1">Mensaje</label>
+          <textarea id="mensaje" rows="5" required class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#5e0013]" placeholder="Hola, tengo un reloj automático que necesita revisión..."></textarea>
+        </div>
+        <p class="text-sm text-gray-600 mb-4">Al enviar el formulario, se abrirá WhatsApp con tu mensaje listo para enviar.</p>
+        <button type="submit" class="bg-[#5e0013] text-white px-6 py-2 rounded hover:bg-[#83041e] transition font-semibold w-full">
+          Enviar por WhatsApp
+        </button>
+      </form>
+
+      <!-- Mensaje de éxito -->
+      <div id="successMessage" class="hidden mt-4 flex items-start justify-between text-sm text-green-800 bg-green-100 border border-green-300 px-4 py-3 rounded" role="alert">
+        <span>¡Mensaje preparado con éxito! Se abrirá WhatsApp en otra pestaña.</span>
+        <button onclick="document.getElementById('successMessage').classList.add('hidden')" class="ml-4 text-green-700 hover:text-green-900 font-bold">
+          ✕
+        </button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Script -->
+<script>
+  document.getElementById('whatsappForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const mensaje = document.getElementById('mensaje').value.trim();
+    const successMessage = document.getElementById('successMessage');
+
+    if (!nombre || !email || !mensaje) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+
+    const texto = `Hola, soy ${nombre} (${email}). Me gustaría consultar por el servicio de relojería:\n\n${mensaje}`;
+    const url = `https://wa.me/56986529903?text=${encodeURIComponent(texto)}`;
+
+    window.open(url, '_blank');
+    document.getElementById('whatsappForm').reset();
+    successMessage.classList.remove('hidden');
+  });
+</script>
+{% endblock %}

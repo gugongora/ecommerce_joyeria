@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="bg-white py-20 px-4">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-12">
+    
+    <!-- Texto de presentación y datos -->
+    <div class="flex flex-col justify-center">
+      <h2 class="text-4xl font-bold text-[#5e0013] mb-4">Contáctanos por WhatsApp</h2>
+      <p class="text-gray-700 mb-6">
+        ¿Tienes una idea para una joya, necesitas una reparación o buscas un diseño único? Completa el formulario
+        y serás redirigido a <strong>WhatsApp</strong> con tu mensaje listo para enviar.
+      </p>
+      
+      <ul class="text-gray-700 space-y-4">
+        <li><strong>📞 WhatsApp directo:</strong> 
+          <a href="https://wa.me/56986529903" class="text-[#5e0013] underline" target="_blank">+56 9 8652 9903</a>
+        </li>
+        <li><strong>📧 Correo:</strong> 
+          <a href="mailto:contacto@gongorajoyas.cl" class="text-[#5e0013] underline">gongorajoyeria@gmail.com</a>
+        </li>
+        <li><strong>📍 Taller:</strong> Viña del Mar, Av. Valparaiso 275 Local 2</li>
+      </ul>
+    </div>
+
+    <!-- Formulario de contacto (envía a WhatsApp) -->
+    <div class="bg-gray-100 p-8 rounded-lg shadow-md">
+      <form id="whatsappForm" novalidate>
+        
+        <div class="mb-4">
+          <label for="nombre" class="block text-gray-700 font-semibold mb-1">Nombre</label>
+          <input type="text" id="nombre" required
+                 class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#5e0013]"
+                 placeholder="Ej: Ana Gómez">
+        </div>
+        
+        <div class="mb-4">
+          <label for="email" class="block text-gray-700 font-semibold mb-1">Correo electrónico</label>
+          <input type="email" id="email" required
+                 class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#5e0013]"
+                 placeholder="Ej: ana@email.com">
+        </div>
+        
+        <div class="mb-4">
+          <label for="mensaje" class="block text-gray-700 font-semibold mb-1">Mensaje</label>
+          <textarea id="mensaje" rows="5" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-[#5e0013]"
+                    placeholder="Hola, quisiera consultar por... Me interesa un diseño personalizado / reparación / cotización de joya."></textarea>
+        </div>
+        
+        <p class="text-sm text-gray-600 mb-4">
+          Al enviar el formulario, se abrirá una nueva pestaña con tu mensaje listo para enviar por WhatsApp.
+        </p>
+        
+        <button type="submit"
+                class="bg-[#5e0013] text-white px-6 py-2 rounded hover:bg-[#83041e] transition font-semibold w-full">
+          Enviar por WhatsApp
+        </button>
+      </form>
+      <!-- Banner de éxito -->
+<div id="successMessage"
+     class="hidden mt-4 flex items-start justify-between text-sm text-green-800 bg-green-100 border border-green-300 px-4 py-3 rounded"
+     role="alert">
+  <span>¡Mensaje preparado con éxito! Te redirigimos a WhatsApp en una nueva pestaña.</span>
+  <button onclick="document.getElementById('successMessage').classList.add('hidden')" class="ml-4 text-green-700 hover:text-green-900 font-bold">
+    ✕
+  </button>
+</div>
+    </div>
+  </div>
+
+  <!-- Script para redirigir a WhatsApp -->
+<script>
+  document.getElementById('whatsappForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const mensaje = document.getElementById('mensaje').value.trim();
+    const successMessage = document.getElementById('successMessage');
+
+    if (!nombre || !email || !mensaje) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+
+    const texto = `Hola, mi nombre es ${nombre} (${email}). Me gustaría hacer una consulta:\n\n${mensaje}`;
+    const url = `https://wa.me/56986529903?text=${encodeURIComponent(texto)}`;
+
+    window.open(url, '_blank');
+    document.getElementById('whatsappForm').reset();
+    successMessage.classList.remove('hidden');
+  });
+
+  // Prellenar el mensaje si viene por GET
+const urlParams = new URLSearchParams(window.location.search);
+const mensajePrellenado = urlParams.get('mensaje');
+if (mensajePrellenado) {
+  document.getElementById('mensaje').value = mensajePrellenado;
+}
+</script>
+
+
+
+
+</section>
+{% endblock %}
