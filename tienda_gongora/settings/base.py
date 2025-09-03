@@ -12,25 +12,26 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+env = environ.Env(
+    DEBUG=(bool, False),
+)
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
+# Ruta por defecto al .env si existe en el root del proyecto
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-ukj7i47@j2vaufo#9bb&$cio5(vl07=!h3cy!cb##9alh5#zyp'
+SECRET_KEY = env("SECRET_KEY", default="!!-reemplaza-esto-en-prod-!!")
+DEBUG = env("DEBUG")  # dev/prod lo sobreescriben
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*'] 
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
 
 
 # API base URL (ajústalo según el entorno)
-API_BASE_URL = "http://127.0.0.1:8000/api/"  # API EN LOCAL
+API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000/api/")
 # API_BASE_URL = "http://52.55.129.100/api/" # API AWS
 
 
@@ -138,20 +139,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'tienda_gongora.wsgi.application'
+ASGI_APPLICATION = "tienda_gongora.asgi.application"
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-       'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tiendagongora',
-        'USER': 'root',
-        'PASSWORD': 'eldiablo1',  # pon tu contraseña si es que tienes
-        'HOST': '127.0.0.1',
-       'PORT': '3306',
-   }
+    "default": env.db(
+        "DATABASE_URL",
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
 }
 
 
@@ -190,14 +188,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+# Zona horaria y lenguaje (Chile)
+LANGUAGE_CODE = "es-cl"
+TIME_ZONE = "America/Santiago"
 USE_I18N = True
-
 USE_TZ = True
-
 USE_L10N = True
 
 
@@ -232,3 +227,26 @@ BASE_URL = "http://127.0.0.1:8000/"
 
 
 TAILWIND_APP_NAME = 'theme'
+
+# Email (dev/prod sobreescriben)
+EMAIL_BACKEND = env(
+    "EMAIL_BACKEND",
+    default="django.core.mail.backends.console.EmailBackend"
+)
+EMAIL_HOST = env("EMAIL_HOST", default="")
+EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@localhost")
+
+# Seguridad común (prod endurece)
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+
+# Logging básico; prod lo refuerza
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": "INFO"},
+}

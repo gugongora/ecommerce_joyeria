@@ -278,3 +278,6 @@ def mantenimiento_relojeria(request):
 
 def contacto(request):
     return render(request, 'store/contacto.html')
+
+def guia_tallas_anillos(request):
+    return render(request, "store/guia_tallas_anillos.html")

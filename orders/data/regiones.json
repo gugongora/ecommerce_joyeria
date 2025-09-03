@@ -1,0 +1,18 @@
+[
+  {"codigo": "01", "nombre": "Región de Tarapacá"},
+  {"codigo": "02", "nombre": "Región de Antofagasta"},
+  {"codigo": "03", "nombre": "Región de Atacama"},
+  {"codigo": "04", "nombre": "Región de Coquimbo"},
+  {"codigo": "05", "nombre": "Región de Valparaíso"},
+  {"codigo": "06", "nombre": "Región del Libertador General Bernardo O'Higgins"},
+  {"codigo": "07", "nombre": "Región del Maule"},
+  {"codigo": "08", "nombre": "Región del Biobío"},
+  {"codigo": "09", "nombre": "Región de La Araucanía"},
+  {"codigo": "10", "nombre": "Región de Los Lagos"},
+  {"codigo": "11", "nombre": "Región de Aysén del Gral. C. Ibáñez del Campo"},
+  {"codigo": "12", "nombre": "Región de Magallanes y de la Antártica Chilena"},
+  {"codigo": "13", "nombre": "Región Metropolitana de Santiago"},
+  {"codigo": "14", "nombre": "Región de Los Ríos"},
+  {"codigo": "15", "nombre": "Región de Arica y Parinacota"},
+  {"codigo": "16", "nombre": "Región de Ñuble"}
+]

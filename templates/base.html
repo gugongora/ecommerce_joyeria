@@ -9,48 +9,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/png" href="{% static 'images/logo-pestana.png' %}">
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="{% static 'images/logo-pestana.png' %}" />
   <title>{% block title %}Gongora Joyas{% endblock %}</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
+  <!-- Iconos -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+  <!-- Tailwind compilado -->
   {% tailwind_css %}
+
+  <!-- Estilos propios (ligeros) -->
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+  {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-[#FFFFFF] text-gray-800 font-sans min-h-screen w-full flex flex-col">
+<body
+  class="bg-[#FFFFFF] text-gray-800 font-sans min-h-screen w-full flex flex-col"
+  data-api-base-url="{{ API_BASE_URL|default:'' }}"
+>
 
-
-<!-- NAVBAR SUPERIOR -->
 <header class="z-50">
-  <!-- Navbar fijo -->
-  <nav class="bg-[#5e0013] shadow fixed top-0 w-full z-50">
+  <!-- NAVBAR FIJO -->
+  <nav class="bg-[#5e0013] shadow fixed top-0 w-full z-[80]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
       <div class="flex items-center justify-between">
-        <!-- IZQUIERDA: Logo -->
+        <!-- Logo -->
         <a href="{% url 'store:product_list' %}" class="flex items-center justify-start h-full">
-          <img src="{% static 'images/logo.png' %}" alt="Logo"
-               class="h-12 w-auto object-contain max-w-[140px]">
+          <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-12 w-auto object-contain max-w-[140px]">
         </a>
 
-        <!-- DERECHA: Buscador + íconos -->
+        <!-- Buscador + íconos -->
         <div class="flex items-center justify-end gap-4 ml-auto">
           <!-- Buscador -->
-          <form id="buscador-api" class="hidden md:flex" onsubmit="buscarProductos(event)">
-            <div class="relative">
-              <input type="search" id="query" placeholder="Buscar..."
-                     class="border border-gray-300 rounded pl-3 pr-9 py-1 text-sm focus:outline-none focus:ring focus:border-blue-300
-                            text-white placeholder-white bg-transparent">
-              <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 text-white hover:text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                     viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M21 21l-4.35-4.35M17.25 10.5a6.75 6.75 0 11-13.5 0 6.75 6.75 0 0113.5 0z" />
-                </svg>
-              </button>
+          <form id="buscador-api" role="search" class="hidden md:block">
+            <label for="query" class="sr-only">Buscar productos</label>
+            <div class="relative group">
+              <input
+                type="search" id="query" name="q" placeholder="Buscar..." autocapitalize="none" autocomplete="off" spellcheck="false"
+                class="w-64 lg:w-80 h-9 rounded-full pl-4 pr-10 text-sm border border-white/20 bg-white/10 text-white placeholder-white/70 shadow-sm transition
+                       focus:outline-none focus:ring-2 focus:ring-white/40 focus:border-white/30 group-hover:bg-white/15" />
+              <span class="absolute inset-y-0 right-1 grid w-9 place-content-center">
+                <button type="submit" aria-label="Buscar" title="Buscar"
+                        class="rounded-full p-1.5 text-white/90 transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/40">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                      fill="none" stroke="currentColor" stroke-width="1.5" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
+                  </svg>
+                </button>
+              </span>
             </div>
           </form>
 
           <!-- Carrito -->
-          <button onclick="openCart()" title="Carrito"
+          <button data-action="open-cart" title="Carrito"
                   class="w-10 h-10 flex items-center justify-center rounded-full bg-[#83041e] hover:bg-[#c7233c] transition relative">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
@@ -68,103 +81,128 @@
           </button>
 
           <!-- Usuario -->
-          {% if user.is_authenticated %}
-            <button onclick="openUser()" title="Cuenta"
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-[#83041e] hover:bg-[#c7233c] transition relative">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M15.75 9a3.75 3.75 0 11-7.5 0M4.5 20.25a8.25 8.25 0 1115 0v.75H4.5v-.75z" />
-              </svg>
-            </button>
-          {% else %}
-            <a href="{% url 'users:login_register' %}"
-               class="w-10 h-10 flex items-center justify-center rounded-full bg-[#83041e] hover:bg-[#c7233c] text-white text-sm transition">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><path d="M16 3.128a4 4 0 0 1 0 7.744"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><circle cx="9" cy="7" r="4"/></svg>
-            </a>
-          {% endif %}
+          <div id="userMenu" class="relative inline-flex z-[90]">
+            <span class="inline-flex divide-x divide-white/10 overflow-hidden rounded-md border border-white/20 bg-white/10 text-white shadow-sm backdrop-blur-sm">
+              <button type="button"
+                      class="px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
+                      aria-label="Cuenta"
+                      data-action="toggle-user-menu">
+                {% if user.is_authenticated %}
+                  {{ user.first_name|default:'Cuenta' }}
+                {% else %}
+                  Cuenta
+                {% endif %}
+              </button>
+              <button id="userMenuToggle" type="button"
+                      class="px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
+                      aria-haspopup="menu" aria-expanded="false"
+                      data-action="toggle-user-menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/>
+                </svg>
+              </button>
+            </span>
+
+            <div id="userDropdown" role="menu" aria-labelledby="userMenuToggle"
+                 class="absolute right-0 top-full mt-2 z-[90] w-56 overflow-hidden rounded border border-gray-200 bg-white shadow-xl opacity-0 -translate-y-2 pointer-events-none transition duration-200">
+              {% if user.is_authenticated and user|has_group:"personal_interno" %}
+                <a href="{% url 'store:dashboard_interno' %}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900" role="menuitem">🛠 Dashboard interno</a>
+                <a href="{% url 'orders:dashboard_pedidos' %}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900" role="menuitem">Ver pedidos</a>
+                <div class="h-px bg-gray-200 my-1"></div>
+              {% endif %}
+              {% if user.is_authenticated %}
+                <a href="{% url 'orders:mis_pedidos' %}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900" role="menuitem">Mis pedidos</a>
+                <form method="post" action="{% url 'users:logout' %}">
+                  {% csrf_token %}
+                  <button type="submit" class="block w-full text-left px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-50">Cerrar sesión</button>
+                </form>
+              {% else %}
+                <a href="{% url 'users:login_register' %}" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900" role="menuitem">Iniciar sesión / Registrarse</a>
+              {% endif %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </nav>
 
-<!-- Menú secundario fijo debajo del navbar -->
-<div class="bg-[#83041e] text-white text-sm py-2 text-center fixed top-[64px] w-full z-50 shadow">
-  <div class="flex justify-center space-x-7 relative">
-
-    <!-- Home -->
-    <a href="{% url 'store:product_list' %}"
-       class="pb-2 border-b-2 transition-all duration-300 {% if not request.GET.categoria %}border-white{% else %}border-transparent hover:border-white{% endif %}">
-      Home
-    </a>
-
-<!-- Productos con submenú -->
-<div class="relative" id="menu-productos">
-  <div id="btn-productos"
-       class="inline-block pb-2 border-b-2 border-transparent transition-all duration-300 cursor-pointer">
-    <a href="{% url 'store:catalogo_productos' %}" class="inline-block text-white">Productos</a>
-  </div>
-
-  <div id="submenu-productos"
-       class="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white text-[#83041e] rounded shadow-lg py-2 w-40
-              opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-    {% for categoria in categorias_api %}
-      <a href="{% url 'store:product_list' %}?categoria={{ categoria.id }}"
-         class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
-        {{ categoria.nombre }}
+  <!-- Menú secundario -->
+  <nav class="fixed top-[64px] w-full z-[60] bg-[#7a0011]/90 text-white text-[13px] shadow-lg backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto h-12 px-4 flex items-center justify-center gap-10 relative">
+      <a href="{% url 'store:product_list' %}"
+         class="relative px-1 py-2 text-white/95 hover:text-white transition-colors duration-200
+                after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0 after:-translate-x-1/2
+                after:bg-white after:transition-all after:duration-300 hover:after:w-full
+                {% if not request.GET.categoria %}after:w-full{% endif %}">
+        Home
       </a>
-    {% endfor %}
-  </div>
-</div>
 
-<!-- Servicios con submenú -->
-<div class="relative" id="menu-servicios">
-  <div id="btn-servicios"
-       class="inline-block pb-2 border-b-2 border-transparent transition-all duration-300 text-white cursor-pointer">
-    Servicios
-  </div>
+      <!-- Productos (hover + click) -->
+      <div class="relative inline-flex items-center h-full group" data-menu="productos">
+        <a href="{% url 'store:catalogo_productos' %}"
+           class="inline-flex items-center gap-1 h-full px-1 text-white/95 hover:text-white transition-colors duration-200 focus:outline-none"
+           aria-haspopup="menu" aria-expanded="false">
+          <span class="relative after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0 after:-translate-x-1/2
+                       after:bg-white after:transition-all after:duration-300 group-hover:after:w-full">
+            Productos
+          </span>
+          <svg class="w-3.5 h-3.5 ml-1 transition-transform duration-300 group-hover:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </a>
+        <span aria-hidden="true" class="absolute left-0 right-0 top-full h-3"></span>
+        <div role="menu"
+             class="invisible pointer-events-none opacity-0 translate-y-2 scale-95 group-hover:visible group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100
+                    absolute top-full mt-3 w-60 origin-top left-0 md:left-1/2 md:-translate-x-1/2 rounded-xl bg-white text-[#5e0013] shadow-2xl ring-1 ring-black/5 border border-gray-100
+                    transition duration-200 z-[80]
+                    before:content-[''] before:absolute before:-top-2 before:left-6 md:before:left-1/2 md:before:-translate-x-1/2 before:w-3 before:h-3 before:bg-white before:rotate-45 before:border-t before:border-l before:border-gray-100">
+          {% for categoria in categorias_api %}
+            <a href="{% url 'store:product_list' %}?categoria={{ categoria.id }}"
+               class="block px-4 py-2 text-[13px] text-gray-800 hover:bg-[#83041e] hover:text-white transition-colors">
+              {{ categoria.nombre }}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
 
-  <div id="submenu-servicios"
-       class="absolute left-1/2 transform -translate-x-1/2 mt-2 bg-white text-[#83041e] rounded shadow-lg py-2 w-52
-              opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-    <a href="{% url 'store:pedidos_exclusivos' %}"
-       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
-      Pedidos exclusivos
-    </a>
-    <a href="{% url 'store:argollas_matrimonio' %}"
-       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
-      Argollas de matrimonio
-    </a>
-    <a href="{% url 'store:argollas_compromiso' %}"
-       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
-      Argollas de compromiso
-    </a>
-    <a href="{% url 'store:reparaciones' %}"
-       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
-      Reparaciones
-    </a>
-    <a href="{% url 'store:mantenimiento_relojeria' %}"
-       class="block px-4 py-2 text-sm hover:bg-[#83041e] hover:text-white transition">
-      Mantención relojería
-    </a>
-  </div>
-</div>
+      <!-- Servicios -->
+      <div class="relative inline-flex items-center h-full group" data-menu="servicios">
+        <a href="{% url 'store:product_list' %}#servicios-destacados"
+           class="inline-flex items-center gap-1 h-full px-1 text-white/95 hover:text-white transition-colors duration-200 focus:outline-none"
+           aria-haspopup="menu" aria-expanded="false">
+          <span class="relative after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0 after:-translate-x-1/2
+                       after:bg-white after:transition-all after:duration-300 group-hover:after:w-full">
+            Servicios
+          </span>
+          <svg class="w-3.5 h-3.5 ml-1 transition-transform duration-300 group-hover:rotate-180"
+               viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/>
+          </svg>
+        </a>
+        <span aria-hidden="true" class="absolute left-0 right-0 top-full h-3"></span>
+        <div role="menu"
+             class="invisible pointer-events-none opacity-0 translate-y-2 scale-95 group-hover:visible group-hover:pointer-events-auto group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100
+                    absolute top-full mt-3 w-64 origin-top left-0 md:left-1/2 md:-translate-x-1/2 rounded-xl bg-white text-[#5e0013] shadow-2xl ring-1 ring-black/5 border border-gray-100
+                    transition duration-200 z-[80]
+                    before:content-[''] before:absolute before:-top-2 before:left-6 md:before:left-1/2 md:before:-translate-x-1/2 before:w-3 before:h-3 before:bg-white before:rotate-45 before:border-t before:border-l before:border-gray-100">
+          <a href="{% url 'store:pedidos_exclusivos' %}" class="block px-4 py-2 text-[13px] text-gray-800 hover:bg-[#83041e] hover:text-white transition-colors">Pedidos exclusivos</a>
+          <a href="{% url 'store:argollas_matrimonio' %}" class="block px-4 py-2 text-[13px] text-gray-800 hover:bg-[#83041e] hover:text-white transition-colors">Argollas de matrimonio</a>
+          <a href="{% url 'store:argollas_compromiso' %}" class="block px-4 py-2 text-[13px] text-gray-800 hover:bg-[#83041e] hover:text-white transition-colors">Argollas de compromiso</a>
+          <a href="{% url 'store:reparaciones' %}" class="block px-4 py-2 text-[13px] text-gray-800 hover:bg-[#83041e] hover:text-white transition-colors">Reparaciones</a>
+          <a href="{% url 'store:mantenimiento_relojeria' %}" class="block px-4 py-2 text-[13px] text-gray-800 hover:bg-[#83041e] hover:text-white transition-colors">Mantención relojería</a>
+        </div>
+      </div>
 
-<!-- Contacto -->
-<a href="{% url 'store:contacto' %}"
-   class="pb-2 border-b-2 border-transparent hover:border-white transition-all duration-300 text-white">
-  Contacto
-</a>
-
-
-  </div>
-</div>
-
-
+      <a href="{% url 'store:contacto' %}"
+         class="relative px-1 py-2 text-white/95 hover:text-white transition-colors duration-200
+                after:absolute after:left-1/2 after:bottom-0 after:h-[2px] after:w-0 after:-translate-x-1/2
+                after:bg-white after:transition-all after:duration-300 hover:after:w-full">
+        Contacto
+      </a>
+    </div>
+  </nav>
 </header>
-
 
 {% block hero %}{% endblock %}
 
@@ -173,53 +211,24 @@
     <div id="flash-messages" class="fixed top-4 inset-x-0 flex justify-center z-50 pointer-events-none">
       {% for message in messages %}
         <div class="relative bg-emerald-100 border border-emerald-400 text-emerald-700 px-6 py-3 rounded shadow-lg animate-fade-in-out max-w-md w-full pointer-events-auto">
-          <button onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-emerald-700 hover:text-red-600 text-lg font-bold">&times;</button>
+          <button data-action="close-flash" class="absolute top-2 right-2 text-emerald-700 hover:text-red-600 text-lg font-bold">&times;</button>
           {{ message }}
         </div>
       {% endfor %}
     </div>
   {% endif %}
+
   {% block content %}{% endblock %}
 </main>
 
-<!-- Conversor USD Modal -->
-<div id="dollarModal" class="fixed inset-0 z-50 hidden flex items-center justify-center">
-  <!-- Fondo oscuro personalizado -->
-  <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, 0.3);"></div>
-
-  <!-- Contenido del modal -->
-  <div class="relative bg-white rounded-lg shadow-lg w-full max-w-md z-10">
-    <form id="converter-form">
-      <div class="px-6 py-4 border-b flex justify-between items-center">
-        <h5 class="font-bold text-lg">Conversor de USD a CLP</h5>
-        <button type="button" class="text-gray-500 hover:text-red-500" data-modal-close>&times;</button>
-      </div>
-      <div class="p-6 space-y-4">
-        <label class="block text-sm font-medium text-gray-700">Monto en USD:</label>
-        <input type="number" step="0.01" id="monto-usd" required class="w-full border border-gray-300 rounded px-4 py-2">
-        <div id="resultado" class="text-green-600 hidden"></div>
-        <div id="error" class="text-red-600 hidden"></div>
-      </div>
-      <div class="px-6 py-4 border-t flex justify-end">
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Convertir</button>
-      </div>
-    </form>
-  </div>
-</div>
-
 <!-- Cart Sidebar -->
-<div id="cartOverlay" class="fixed inset-0 z-50 hidden" onclick="handleCartOverlayClick(event)">
-  <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, 0.3);"></div>
-
+<div id="cartOverlay" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/30"></div>
   <div id="cartSidebar" class="absolute top-0 right-0 w-80 h-screen bg-white shadow-lg transform translate-x-full transition-transform duration-300 flex flex-col">
-    
-    <!-- Encabezado -->
     <div class="flex justify-between items-center p-4 border-b">
       <h2 class="text-lg font-semibold text-[#5e0013]">Tu Carrito</h2>
-      <button onclick="closeCart()" class="text-gray-500 hover:text-red-600 text-2xl">&times;</button>
+      <button data-action="close-cart" class="text-gray-500 hover:text-red-600 text-2xl">&times;</button>
     </div>
-    
-    <!-- Contenido con scroll -->
     <div class="flex-1 overflow-y-auto p-4 text-sm text-gray-700">
       {% with cart=request.session.cart %}
         {% if cart %}
@@ -230,10 +239,10 @@
                   <li class="py-3 flex justify-between items-center">
                     <div class="flex items-start gap-3">
                       {% if product.imagen %}
-  <img src="{{ product.imagen }}" alt="{{ product.nombre }}" class="w-12 h-12 object-cover rounded shadow">
-{% else %}
-  <img src="{% static 'images/no-image.jpg' %}" alt="{{ product.nombre }}" class="w-12 h-12 object-cover rounded shadow">
-{% endif %}
+                        <img src="{{ product.imagen }}" alt="{{ product.nombre }}" class="w-12 h-12 object-cover rounded shadow">
+                      {% else %}
+                        <img src="{% static 'images/no-image.jpg' %}" alt="{{ product.nombre }}" class="w-12 h-12 object-cover rounded shadow">
+                      {% endif %}
                       <div>
                         <p class="font-semibold text-sm leading-tight">{{ product.nombre }}</p>
                         <p class="text-gray-700 text-sm">{{ product.precio_actual|clp_format }}</p>
@@ -251,8 +260,6 @@
         {% endif %}
       {% endwith %}
     </div>
-
-    <!-- Pie con subtotal y botón -->
     <div class="border-t p-4">
       {% cart_total as cart_total_value %}
       <div class="flex justify-between font-semibold text-gray-800 text-sm mb-4">
@@ -266,80 +273,27 @@
   </div>
 </div>
 
-
-
-<!-- User Sidebar -->
-<div id="userOverlay" class="fixed inset-0 z-50 hidden" onclick="handleUserOverlayClick(event)">
-  <div class="absolute inset-0" style="background-color: rgba(0, 0, 0, 0.3);"></div>
-  <div id="userSidebar" class="absolute top-0 right-0 h-full w-64 bg-[#FFFFFF] shadow-lg transform translate-x-full transition-transform duration-300 overflow-y-auto">
-    <div class="flex justify-between items-center p-4 border-b">
-      <h2 class="text-lg font-semibold">Mi cuenta</h2>
-      <button onclick="closeUser()" class="text-gray-500 hover:text-red-600 text-2xl">&times;</button>
-    </div>
-
-    <div class="p-4 text-sm text-gray-700 space-y-3">
-      {% if user.is_authenticated and user|has_group:"personal_interno" %}
-        <a href="{% url 'store:dashboard_interno' %}"
-           class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded transition">
-          🛠 Dashboard Interno
-        </a>
-        <a href="{% url 'orders:dashboard_pedidos' %}" class="block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded transition">
-  📦 Ver Pedidos
-</a>
-      {% endif %}
-
-      {% if user.is_authenticated %}
-        <a href="{% url 'orders:mis_pedidos' %}"
-           class="block w-full text-center bg-[#5e0013] hover:bg-[#7f1d1d] text-white py-2 px-4 rounded transition">
-          🧾 Mis pedidos
-        </a>
-      {% endif %}
-
-      <form method="post" action="{% url 'users:logout' %}">
-        {% csrf_token %}
-        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded">
-          Cerrar sesión
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-
-
-
 <footer class="bg-[#5e0013] text-white py-7 mt-1">
   <div class="max-w-7xl mx-auto px-6 text-sm">
-
-    <!-- Icono centrado con separación -->  
     <div class="flex justify-center mb-8">
       <img src="{% static 'images/logo-g.png' %}" alt="Logo Góngora" class="h-14">
     </div>
-
-    <!-- Grid del contenido -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-8">
-
-      <!-- Contacto -->
       <div>
         <h3 class="font-bold uppercase mb-3">Contacto</h3>
-        <p>Viña del Mar, Región de Valparaíso</p>
+        <p>Av. Valparaíso 275 Local 2, Viña del Mar</p>
         <p>+56 9 9614 0632</p>
         <p>gongorajoyeria@gmail.com</p>
       </div>
-
-      <!-- Información -->
       <div>
         <h3 class="font-bold uppercase mb-3">Información</h3>
         <ul class="space-y-1">
-          <li><a href="#" class="hover:underline">Sobre Nosotros</a></li>
-          <li><a href="#" class="hover:underline">Guía de Tallas</a></li>
+          <li><a href="{% url 'store:quienes_somos' %}" class="hover:underline">Sobre Nosotros</a></li>
+          <li><a href="{% url 'store:guia_tallas_anillos' %}" class="hover:underline">Guía de Tallas</a></li>
           <li><a href="#" class="hover:underline">Joyas a Medida</a></li>
           <li><a href="#" class="hover:underline">Reparaciones</a></li>
         </ul>
       </div>
-
-      <!-- Políticas -->
       <div>
         <h3 class="font-bold uppercase mb-3">Políticas</h3>
         <ul class="space-y-1">
@@ -348,8 +302,6 @@
           <li><a href="#" class="hover:underline">Garantía y Cambios</a></li>
         </ul>
       </div>
-
-      <!-- Pago -->
       <div>
         <h3 class="font-bold uppercase mb-3">Formas de Pago</h3>
         <ul class="space-y-1">
@@ -360,217 +312,32 @@
           <img src="{% static 'images/webpay-logo.png' %}" alt="Webpay" class="h-6">
         </div>
       </div>
-
-      <!-- Redes -->
       <div>
         <h3 class="font-bold uppercase mb-3">Síguenos</h3>
         <div class="flex space-x-4">
-          <a href="https://facebook.com" target="_blank" class="hover:text-gray-300">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="https://instagram.com" target="_blank" class="hover:text-gray-300">
-            <i class="fab fa-instagram"></i>
-          </a>
+          <a href="https://facebook.com" target="_blank" class="hover:text-gray-300"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com" target="_blank" class="hover:text-gray-300"><i class="fab fa-instagram"></i></a>
         </div>
       </div>
-
     </div>
-
-    <!-- Pie de página -->
     <div class="mt-10 text-center text-xs text-gray-300">
       © 2025 Góngora Joyas | Diseño y desarrollo por Gustavo Gongora
     </div>
-
   </div>
 </footer>
 
-
-
-<!-- Botón flotante de WhatsApp -->
-<a id="whatsappButton" href="https://api.whatsapp.com/send?phone=56996140632&text=Hola%20,%20necesito%20más%20información" 
-   target="_blank" 
+<!-- WhatsApp flotante -->
+<a id="whatsappButton" href="https://api.whatsapp.com/send?phone=56996140632&text=Hola%20,%20necesito%20más%20información"
+   target="_blank"
    class="fixed bottom-6 right-6 bg-green-500 hover:bg-green-600 text-white w-18 h-18 flex items-center justify-center rounded-full shadow-lg z-50 transition duration-300 ease-in-out">
-  <svg xmlns="http://www.w3.org/2000/svg" 
-       viewBox="0 0 448 512"
-       class="w-8 h-8 fill-white">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-8 h-8 fill-white">
     <path d="M380.9 97.1C339.3 55.5 282.7 32 224 32S108.7 55.5 67.1 97.1C25.5 138.7 2 195.3 2 254c0 45.4 13.6 89.3 39.3 126.7L0 480l102.3-38.4c35.1 19.3 74.2 29.4 121.7 29.4 58.7 0 115.3-23.5 156.9-65.1 41.6-41.6 65.1-98.2 65.1-156.9s-23.5-115.3-65.1-156.9zM224 426c-40.9 0-81.3-11-115.9-31.8l-8.3-4.9-61 22.9 22.5-59.2-5.4-8.8C39.1 314.8 30 285.2 30 254c0-107.1 87-194 194-194s194 87 194 194-87 194-194 194zm97.7-135.3c-5.3-2.7-31.4-15.4-36.3-17.1-4.9-1.8-8.5-2.7-12.1 2.7s-13.9 17.1-17 20.6c-3.1 3.5-6.3 4-11.6 1.3s-22.6-8.3-43-26.5c-15.9-14.1-26.7-31.4-29.8-36.7-3.1-5.4-.3-8.3 2.3-11 2.4-2.4 5.3-6.3 7.9-9.4 2.6-3.1 3.5-5.4 5.3-9 1.8-3.5.9-6.6-.4-9.4s-12.1-29.3-16.6-40.2c-4.4-10.6-8.9-9.2-12.1-9.3-3.1-.2-6.6-.2-10.1-.2s-9.4 1.3-14.3 6.6c-4.9 5.4-18.7 18.3-18.7 44.7s19.2 51.8 21.9 55.4c2.7 3.5 37.5 57.4 91 80.5 53.5 23.1 53.5 15.4 63.1 14.5 9.6-.9 31.4-12.8 35.9-25.2 4.4-12.4 4.4-23 .3-25.3z"/>
   </svg>
 </a>
 
+<!-- JS principal (defer) -->
+<script src="{% static 'js/main.js' %}" defer></script>
 
-
-  <!-- JS -->
-  <script>
-    document.querySelectorAll('[data-modal-target]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const targetId = btn.getAttribute('data-modal-target');
-        document.getElementById(targetId).classList.remove('hidden');
-      });
-    });
-
-    document.querySelectorAll('[data-modal-close]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        btn.closest('.fixed').classList.add('hidden');
-      });
-    });
-
-function openCart() {
-  document.getElementById("cartOverlay").classList.remove("hidden");
-  document.getElementById("cartSidebar").classList.remove("translate-x-full");
-
-  // Oculta WhatsApp
-  const whatsapp = document.getElementById("whatsappButton");
-  if (whatsapp) whatsapp.classList.add("hidden");
-}
-
-function closeCart() {
-  document.getElementById("cartSidebar").classList.add("translate-x-full");
-  setTimeout(() => {
-    document.getElementById("cartOverlay").classList.add("hidden");
-
-    // Muestra WhatsApp
-    const whatsapp = document.getElementById("whatsappButton");
-    if (whatsapp) whatsapp.classList.remove("hidden");
-  }, 300);
-}
-
-    function handleCartOverlayClick(event) {
-      const sidebar = document.getElementById("cartSidebar");
-      if (!sidebar.contains(event.target)) closeCart();
-    }
-
-    function openUser() {
-      document.getElementById("userOverlay").classList.remove("hidden");
-      document.getElementById("userSidebar").classList.remove("translate-x-full");
-    }
-
-    function closeUser() {
-      document.getElementById("userSidebar").classList.add("translate-x-full");
-      setTimeout(() => {
-        document.getElementById("userOverlay").classList.add("hidden");
-      }, 300);
-    }
-
-    function handleUserOverlayClick(event) {
-      const sidebar = document.getElementById("userSidebar");
-      if (!sidebar.contains(event.target)) closeUser();
-    }
-  </script>
-
-  <script src="{% static 'js/conversor.js' %}"></script>
-
-  <script>
-  const API_BASE_URL = "{{ API_BASE_URL }}";
-  </script>
-
-
-  <script>
-  function buscarProductos(event) {
-    event.preventDefault();  // Evita el envío tradicional del formulario
-
-    const query = document.getElementById("query").value.trim();
-    if (!query) return;
-
-    const apiURL = `${API_BASE_URL}productos/?search=${encodeURIComponent(query)}`;
-    const productGrid = document.getElementById("product-grid");
-    productGrid.innerHTML = '<p class="col-span-3 text-center text-gray-500">Buscando...</p>';
-
-    fetch(apiURL)
-      .then(res => res.json())
-      .then(data => {
-        productGrid.innerHTML = '';
-
-        if (!data.results || data.results.length === 0) {
-          productGrid.innerHTML = '<p class="col-span-3 text-center text-red-600">No se encontraron resultados.</p>';
-          return;
-        }
-
-        data.results.forEach(producto => {
-          const card = document.createElement('div');
-          card.className = 'bg-[#F5E6CA] shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300';
-
-          const imageSrc = producto.imagen_url || '{% static "images/no-image.jpg" %}';
-          const precio = producto.precio_actual ?? 0;
-
-          card.innerHTML = `
-            <img src="${imageSrc}" alt="${producto.nombre}" class="w-full h-64 object-cover">
-            <div class="p-5">
-              <h3 class="text-lg font-semibold text-gray-900 mb-1">${producto.nombre}</h3>
-              <p class="text-sm text-gray-600 mb-2">${producto.descripcion?.slice(0, 100) || ''}</p>
-              <p class="text-xl font-bold text-[#BD6A5C] mb-4">$${precio}</p>
-              <div class="flex flex-col gap-2">
-                <a href="/store/producto/${producto.id}/" class="text-center bg-[#F5E6CA] border border-gray-800 text-gray-800 hover:bg-[#4B302D] hover:text-white font-medium py-2 px-4 rounded transition-colors">
-                  Ver detalles
-                </a>
-                <form action="/cart/add/${producto.id}/" method="post">
-                  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                  <button type="submit" class="w-full bg-[#BD6A5C] hover:bg-[#D6B79E] text-white font-medium py-2 px-4 rounded transition-colors">
-                    Agregar al carrito
-                  </button>
-                </form>
-              </div>
-            </div>
-          `;
-
-          productGrid.appendChild(card);
-        });
-      })
-      .catch(error => {
-        productGrid.innerHTML = `<p class="col-span-3 text-center text-red-600">Error: ${error.message}</p>`;
-      });
-  }
-</script>
-<script>
-  function manejarSubmenu(botonId, submenuId, contenedorId, otrosSubmenus = []) {
-    const boton = document.getElementById(botonId);
-    const submenu = document.getElementById(submenuId);
-    const contenedor = document.getElementById(contenedorId);
-    let timeout;
-
-    contenedor.addEventListener('mouseenter', () => {
-      clearTimeout(timeout);
-      
-      // Mostrar el submenu actual
-      submenu.classList.remove('opacity-0', 'pointer-events-none');
-      submenu.classList.add('opacity-100', 'pointer-events-auto');
-
-      // Ocultar los otros submenus
-      otrosSubmenus.forEach(id => {
-        const otro = document.getElementById(id);
-        if (otro) {
-          otro.classList.add('opacity-0', 'pointer-events-none');
-          otro.classList.remove('opacity-100', 'pointer-events-auto');
-        }
-      });
-    });
-
-    contenedor.addEventListener('mouseleave', () => {
-      timeout = setTimeout(() => {
-        submenu.classList.add('opacity-0', 'pointer-events-none');
-        submenu.classList.remove('opacity-100', 'pointer-events-auto');
-      }, 200);
-    });
-  }
-
-  manejarSubmenu(
-    'btn-productos',
-    'submenu-productos',
-    'menu-productos',
-    ['submenu-servicios']  // Submenú que se debe cerrar si este se abre
-  );
-
-  manejarSubmenu(
-    'btn-servicios',
-    'submenu-servicios',
-    'menu-servicios',
-    ['submenu-productos']  // Submenú que se debe cerrar si este se abre
-  );
-</script>
-
-
-
-
-
-  
+{% block extra_js %}{% endblock %}
 </body>
 </html>

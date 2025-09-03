@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+  <!-- STEPS -->
+  <div class="mb-6">
+    <ol class="grid grid-cols-3 gap-2 text-xs md:text-sm">
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700">1</span>
+        Carrito
+      </li>
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-[#F5E6CA] text-[#5e0013] font-semibold border border-[#e8d6b5]">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-[#5e0013] text-white">2</span>
+        Datos & Envío
+      </li>
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700">3</span>
+        Pago
+      </li>
+    </ol>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- FORM -->
+    <section class="lg:col-span-2 bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+      <h1 class="text-2xl font-bold text-gray-900 mb-1">Datos de contacto y envío</h1>
+      <p class="text-sm text-gray-600 mb-6">Usaremos esta información para coordinar la entrega de tu pedido.</p>
+
+      <form id="shipping-form" method="post" action="{% url 'orders:checkout_shipping' %}" class="space-y-6">
+        {% csrf_token %}
+
+        <!-- CONTACTO -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Contacto</h2>
+          <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm text-gray-700">Nombre</label>
+              <input required name="first_name" type="text" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#F5E6CA]" value="{{ user.first_name }}">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700">Apellido</label>
+              <input required name="last_name" type="text" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#F5E6CA]" value="{{ user.last_name }}">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700">Email</label>
+              <input required name="email" type="email" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#F5E6CA]" value="{{ user.email }}">
+            </div>
+            <div>
+              <label class="block text-sm text-gray-700">Teléfono</label>
+              <input required name="phone" type="tel" placeholder="+56 9 1234 5678" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#F5E6CA]" value="{{ profile.phone|default:'' }}">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm text-gray-700">RUT (opcional)</label>
+              <input name="rut" type="text" placeholder="12.345.678-9" class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#F5E6CA]" value="{{ profile.rut|default:'' }}">
+            </div>
+          </div>
+        </div>
+
+        <!-- DIRECCIÓN -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Dirección de envío</h2>
+
+          <div class="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Calle -->
+            <div class="md:col-span-2">
+              <label for="address" class="block text-sm font-medium text-gray-700">Calle y número</label>
+              <input id="address" name="address" type="text" required
+                     class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#BD6A5C]"
+                     placeholder="Ej: Av. Libertad 1234">
+            </div>
+
+            <!-- Depto / Casa -->
+            <div>
+              <label for="address2" class="block text-sm font-medium text-gray-700">Depto./Casa (opcional)</label>
+              <input id="address2" name="address2" type="text"
+                     class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#BD6A5C]"
+                     placeholder="Ej: Depto 401, Torre B">
+            </div>
+
+            <!-- Región -->
+            <div>
+              <label for="region" class="block text-sm font-medium text-gray-700">Región</label>
+              <select id="region" name="region" required
+                      class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#BD6A5C]">
+                <option value="" disabled selected>Selecciona tu región</option>
+              </select>
+            </div>
+
+            <!-- Comuna -->
+            <div>
+              <label for="comuna" class="block text-sm font-medium text-gray-700">Comuna</label>
+              <select id="comuna" name="comuna" required
+                      class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#BD6A5C]">
+                <option value="" disabled selected>Selecciona tu comuna</option>
+              </select>
+            </div>
+
+            <!-- Referencias -->
+            <div class="md:col-span-2">
+              <label for="notes" class="block text-sm font-medium text-gray-700">Referencias (opcional)</label>
+              <textarea id="notes" name="notes" rows="3"
+                        class="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring focus:ring-[#BD6A5C]"
+                        placeholder="Indica puntos de referencia o instrucciones para el repartidor"></textarea>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- MÉTODO DE ENTREGA -->
+        <div>
+          <h2 class="text-lg font-semibold text-gray-900">Entrega</h2>
+          <div class="mt-3 grid gap-3">
+            <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+              <input type="radio" name="shipping_method" value="pickup" class="text-[#5e0013]" checked>
+              <div>
+                <p class="font-medium text-gray-900">Retiro en taller (gratis)</p>
+                <p class="text-xs text-gray-600">Coordinamos por WhatsApp para retiro en Viña del Mar.</p>
+              </div>
+            </label>
+            <label class="flex items-center gap-3 p-3 border rounded-lg cursor-pointer hover:bg-gray-50">
+              <input type="radio" name="shipping_method" value="home" class="text-[#5e0013]">
+              <div>
+                <p class="font-medium text-gray-900">Envío a domicilio</p>
+                <p class="text-xs text-gray-600">Costo según comuna. Tiempo estimado 2–5 días hábiles.</p>
+              </div>
+            </label>
+          </div>
+        </div>
+
+<form method="post" action="{% url 'orders:checkout_shipping' %}">
+  {% csrf_token %}
+  <!-- … campos de contacto, dirección, entrega … -->
+
+  <!-- CTA -->
+  <div class="flex items-center justify-between pt-2">
+    <a href="{% url 'cart:view_cart' %}" class="text-[#BD6A5C] hover:text-[#83041e] font-medium">← Volver al carrito</a>
+
+    <button
+      type="submit"
+      formaction="{% url 'orders:checkout_shipping' %}" 
+      class="inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5"
+    >
+      Continuar a pago
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
+</form>
+    </section>
+
+    <!-- RESUMEN -->
+    <aside class="lg:col-span-1">
+      <div class="sticky top-24">
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+          <h2 class="text-lg font-bold text-gray-900 mb-4">Resumen</h2>
+          <dl class="space-y-3 text-sm">
+            <div class="flex items-center justify-between">
+              <dt class="text-gray-600">Subtotal</dt>
+              <dd class="font-medium text-gray-800">{{ total|clp_format }}</dd>
+            </div>
+            <div id="shippingRow" class="flex items-center justify-between">
+              <dt class="text-gray-600">Envío</dt>
+              <dd id="shippingCost" class="text-gray-500">Por calcular</dd>
+            </div>
+            <div class="flex items-center justify-between border-t pt-3">
+              <dt class="text-gray-900 font-semibold">Total estimado</dt>
+              <dd id="grandTotal" class="text-xl font-extrabold text-[#5e0013]">{{ total|clp_format }}</dd>
+            </div>
+          </dl>
+          <div class="mt-6 space-y-2 text-xs text-gray-500">
+            <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Pago seguro con Webpay / tarjetas</div>
+            <div class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Cambios dentro de 30 días</div>
+          </div>
+        </section>
+        <div class="mt-4 text-xs text-gray-500 text-center">¿Tienes dudas? Escríbenos por WhatsApp.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script id="cart-total-json" type="application/json">{{ total|floatformat:0 }}</script>
+<script>
+  const shippingMethodInputs = document.querySelectorAll('input[name="shipping_method"]');
+  const regionSelect = document.getElementById('region');
+  const shippingCostEl = document.getElementById('shippingCost');
+  const grandTotalEl = document.getElementById('grandTotal');
+  const baseTotal = Number(document.getElementById('cart-total-json').textContent) || 0;
+
+  function formatCLP(n) {
+    try { return n.toLocaleString('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}); }
+    catch(e){ return '$' + Math.round(n); }
+  }
+
+  function computeShipping() {
+    const method = document.querySelector('input[name="shipping_method"]:checked')?.value;
+    const region = regionSelect?.value || '05';
+    let ship = 0;
+    if (method === 'home') { ship = (region === '05') ? 3990 : 5990; }
+    shippingCostEl.textContent = ship > 0 ? formatCLP(ship) : 'Gratis';
+    grandTotalEl.textContent = formatCLP(baseTotal + ship);
+  }
+
+  shippingMethodInputs.forEach(i => i.addEventListener('change', computeShipping));
+  regionSelect?.addEventListener('change', computeShipping);
+  computeShipping();
+</script>
+
+<script>
+async function loadRegiones() {
+  const regionSelect = document.getElementById("region");
+  regionSelect.disabled = true;
+  regionSelect.innerHTML = '<option value="" selected>Cargando regiones…</option>';
+
+  try {
+    const res = await fetch("/orders/api/regiones/");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const regiones = await res.json();
+
+    regionSelect.innerHTML = '<option value="" disabled selected>Selecciona tu región</option>';
+    regiones.forEach(r => {
+      const opt = document.createElement("option");
+      opt.value = r.codigo;
+      opt.textContent = r.nombre;
+      regionSelect.appendChild(opt);
+    });
+  } catch (err) {
+    console.error("❌ Regiones:", err);
+    regionSelect.innerHTML = '<option value="" disabled selected>No disponible. Intenta recargar.</option>';
+  } finally {
+    regionSelect.disabled = false;
+  }
+}
+
+async function loadComunas(regionCode) {
+  const comunaSelect = document.getElementById("comuna");
+  comunaSelect.disabled = true;
+  comunaSelect.innerHTML = '<option value="" selected>Cargando comunas…</option>';
+
+  try {
+    const res = await fetch(`/orders/api/regiones/${regionCode}/comunas/`);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const comunas = await res.json();
+
+    comunaSelect.innerHTML = '<option value="" disabled selected>Selecciona tu comuna</option>';
+    comunas.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.codigo;
+      opt.textContent = c.nombre;
+      comunaSelect.appendChild(opt);
+    });
+  } catch (err) {
+    console.error("❌ Comunas:", err);
+    comunaSelect.innerHTML = '<option value="" disabled selected>No disponible. Intenta recargar.</option>';
+  } finally {
+    comunaSelect.disabled = false;
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadRegiones();
+  document.getElementById("region").addEventListener("change", e => {
+    if (e.target.value) loadComunas(e.target.value);
+  });
+});
+</script>
+{% endblock %}

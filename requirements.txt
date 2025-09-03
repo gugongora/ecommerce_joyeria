@@ -10,4 +10,4 @@ drf-yasg
 djangorestframework-simplejwt
 requests
 Pillow
-cryptography
+cryptographydjango-environ==0.12.0

@@ -10,6 +10,11 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.paginator import Paginator  # Opcional para paginación
 from django.contrib import messages
+# ✅ Reutiliza tu Cart
+from cart.cart import Cart
+from django.http import JsonResponse
+import requests
+
 
 
 @login_required
@@ -112,3 +117,86 @@ def detalle_pedido(request, order_id):
         'order': order,
         'items': items
     })
+
+
+def checkout_shipping(request):
+    cart = Cart(request)
+    cart_items = list(cart)
+    total = cart.get_total_price()
+
+    if not cart_items:
+        messages.info(request, "Tu carrito está vacío.")
+        return redirect("cart:view_cart")
+
+    if request.method == "POST":
+        data = {
+            "first_name": request.POST.get("first_name"),
+            "last_name": request.POST.get("last_name"),
+            "email": request.POST.get("email"),
+            "phone": request.POST.get("phone"),
+            "rut": request.POST.get("rut"),
+            "address": request.POST.get("address"),
+            "address2": request.POST.get("address2"),
+            "comuna": request.POST.get("comuna"),
+            "region": request.POST.get("region"),
+            "notes": request.POST.get("notes"),
+            "shipping_method": request.POST.get("shipping_method", "pickup"),
+        }
+        # Guarda datos temporales de checkout en sesión (o crea Order draft)
+        request.session["checkout_shipping"] = data
+        return redirect("orders:checkout_pay")
+
+    context = {
+        "cart_items": cart_items,
+        "total": total,
+        # Cárgalas desde tu fuente real; por ahora placeholders
+        "comunas": [],
+        "regiones": [],
+    }
+    return render(request, "orders/checkout_datos_envio.html", context)
+
+
+def checkout_pay(request):
+    """
+    Paso 3 (Pago): muestra resumen y método de pago.
+    Requiere: carrito con items y datos de envío en sesión.
+    """
+    cart = Cart(request)
+    cart_items = list(cart)
+    total = cart.get_total_price()
+    shipping = request.session.get("checkout_shipping")
+
+    # Si no hay carrito → vuelve al carrito
+    if not cart_items:
+        messages.error(request, "Tu carrito está vacío.")
+        return redirect("cart:view_cart")
+
+    # Si no hay datos de envío → vuelve al paso 2
+    if not shipping:
+        messages.info(request, "Completa los datos de envío.")
+        return redirect("orders:checkout_shipping")
+
+    # GET: renderiza la página de pago (Paso 3)
+    return render(request, "orders/checkout_pay.html", {
+        "cart_items": cart_items,
+        "total": total,
+        "shipping": shipping,  # lo usa el template para mostrar resumen
+    })
+
+def regiones(request):
+    """Devuelve todas las regiones de Chile desde API oficial"""
+    url = "https://apis.digital.gob.cl/dpa/regiones"
+    res = requests.get(url, timeout=10)
+    return JsonResponse(res.json(), safe=False)
+
+def comunas(request, region_code):
+    """Devuelve todas las comunas de una región (iterando provincias)"""
+    provincias_url = f"https://apis.digital.gob.cl/dpa/regiones/{region_code}/provincias"
+    provincias = requests.get(provincias_url, timeout=10).json()
+
+    comunas = []
+    for p in provincias:
+        comunas_url = f"https://apis.digital.gob.cl/dpa/provincias/{p['codigo']}/comunas"
+        comunas.extend(requests.get(comunas_url, timeout=10).json())
+
+    return JsonResponse(comunas, safe=False)

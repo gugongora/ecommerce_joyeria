@@ -1,55 +1,201 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Quiénes somos · Góngora Joyas{% endblock %}
+
+{# Hacemos el main full width para permitir secciones de borde a borde #}
+{% block main_classes %}pt-[128px] flex-grow w-full{% endblock %}
+
 {% block content %}
-<!-- Sección de presentación -->
-<section class="w-full h-[700px] bg-cover bg-center flex items-center justify-center" style="background-image: url('{% static "images/somos-fondo.jpg" %}');">
-  <div class="bg-black bg-opacity-60 text-white p-8 max-w-xl text-center rounded shadow-lg">
-    <h1 class="text-3xl font-bold mb-4">SOMOS</h1>
-    <p class="mb-2">
-      Nuestras obras son una delicada combinación, de esmero talento y experiencia.
+
+<!-- HERO FULL-BLEED -->
+<section class="relative w-full h-[70vh] overflow-hidden">
+  <img src="{% static 'images/somos-fondo.jpg' %}" alt="Taller de orfebrería Góngora Joyas"
+       class="absolute inset-0 w-full h-full object-cover scale-105 will-change-transform">
+  <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/40"></div>
+
+  <div class="relative h-full max-w-5xl mx-auto px-6 flex flex-col items-center justify-center text-center text-white">
+    <p class="tracking-widest text-xs uppercase mb-4 animate-fade-up [animation-delay:80ms]">Desde Viña del Mar · Chile</p>
+    <h1 class="text-3xl md:text-5xl font-extrabold mb-4 leading-tight animate-fade-up">Oficio, precisión y alma en cada pieza</h1>
+    <p class="max-w-2xl text-sm md:text-base text-white/90 mb-8 animate-fade-up [animation-delay:120ms]">
+      Somos un taller que combina técnica tradicional con diseño contemporáneo para crear joyas que cuentan historias.
     </p>
-    <p class="mb-4">
-      Descubra las piezas de joyería que creamos hoy con pasión y con la trayectoria...
-    </p>
-    <a href="{% url 'store:product_list' %}" class="bg-white text-black font-semibold px-4 py-2 rounded hover:bg-gray-200">Volver al catálogo</a>
+    <div class="flex items-center gap-3 animate-fade-up [animation-delay:180ms]">
+      <a href="{% url 'store:catalogo_productos' %}"
+         class="inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F5E6CA]">
+        Ver catálogo
+      </a>
+      <a href="{% url 'store:pedidos_exclusivos' %}"
+         class="inline-flex items-center gap-2 rounded-lg bg-white/90 hover:bg-white text-[#5e0013] font-semibold py-3 px-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5e0013]">
+        Pedido exclusivo
+      </a>
+    </div>
   </div>
 </section>
 
-<!-- Servicios destacados del Maestro Orfebre -->
-<section class="w-full py-16 bg-white px-6">
-  <h3 class="text-3xl font-semibold text-center text-gray-800 mb-12">Especialidades del Maestro Orfebre</h3>
-  
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-    
-    <!-- Reparaciones -->
-    <div id="reparaciones" class="flex flex-col">
-      <img src="{% static 'images/servicios/reparaciones.jpg' %}" alt="Reparaciones de joyas" class="w-full h-60 object-cover rounded shadow mb-4">
-      <h4 class="text-lg font-semibold text-gray-700 mb-2 uppercase">Reparaciones</h4>
-      <p class="text-sm text-gray-600 mb-3">Recupera el valor sentimental y funcional de tus piezas favoritas.</p>
+<!-- BANDA 1 · IMAGEN IZQUIERDA / TEXTO DERECHA -->
+<section class="w-full">
+  <div class="grid grid-cols-1 lg:grid-cols-2">
+    <div class="relative min-h-[360px] lg:min-h-[540px] overflow-hidden">
+      <img src="{% static 'images/quienes/atelier.jpg' %}" alt="Proceso de orfebrería en banco de trabajo"
+           class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
     </div>
-
-    <!-- Argollas de Matrimonio -->
-    <div id="argollas" class="flex flex-col">
-      <img src="{% static 'images/servicios/argollas.jpg' %}" alt="Argollas de matrimonio" class="w-full h-60 object-cover rounded shadow mb-4">
-      <h4 class="text-lg font-semibold text-gray-700 mb-2 uppercase">Argollas de Matrimonio</h4>
-      <p class="text-sm text-gray-600 mb-3">Diseños únicos hechos a mano para el compromiso de una vida.</p>
+    <div class="bg-white flex items-center">
+      <div class="max-w-xl mx-auto px-6 py-12 md:py-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 animate-reveal">El taller, el corazón</h2>
+        <p class="text-gray-600 leading-relaxed mb-6 animate-reveal">
+          Cada pieza nace en nuestro banco de trabajo. Pulimos, soldamos y engastamos a mano, cuidando proporciones,
+          brillo y ergonomía para un uso cómodo y duradero.
+        </p>
+        <ul class="space-y-3 text-gray-700">
+          <li class="flex items-start gap-3 animate-reveal"><span class="mt-1 w-2 h-2 rounded-full bg-[#5e0013]"></span>Metales nobles certificados.</li>
+          <li class="flex items-start gap-3 animate-reveal"><span class="mt-1 w-2 h-2 rounded-full bg-[#5e0013]"></span>Acabados espejo y satinados de alta precisión.</li>
+          <li class="flex items-start gap-3 animate-reveal"><span class="mt-1 w-2 h-2 rounded-full bg-[#5e0013]"></span>Ajustes y mantención postventa.</li>
+        </ul>
+      </div>
     </div>
-
-    <!-- Pedidos Personalizados -->
-    <div id="personalizados" class="flex flex-col">
-      <img src="{% static 'images/servicios/pedidos.jpg' %}" alt="Diseños personalizados" class="w-full h-60 object-cover rounded shadow mb-4">
-      <h4 class="text-lg font-semibold text-gray-700 mb-2 uppercase">Pedidos Exclusivos</h4>
-      <p class="text-sm text-gray-600 mb-3">Creamos joyas únicas según tus ideas, con atención a cada detalle.</p>
-    </div>
-
-    <!-- Garantía -->
-    <div id="garantia" class="flex flex-col">
-      <img src="{% static 'images/servicios/garantia.jpg' %}" alt="Garantía" class="w-full h-60 object-cover rounded shadow mb-4">
-      <h4 class="text-lg font-semibold text-gray-700 mb-2 uppercase">Garantía & Ajustes</h4>
-      <p class="text-sm text-gray-600 mb-3">Servicio postventa para ajustes y limpieza sin costo adicional.</p>
-    </div>
-
   </div>
 </section>
+
+<!-- BANDA 2 · TEXTO IZQUIERDA / IMAGEN DERECHA -->
+<section class="w-full">
+  <div class="grid grid-cols-1 lg:grid-cols-2">
+    <div class="order-2 lg:order-1 bg-[#F5E6CA] flex items-center">
+      <div class="max-w-xl mx-auto px-6 py-12 md:py-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 animate-reveal">Diseño con propósito</h2>
+        <p class="text-gray-700 leading-relaxed mb-6 animate-reveal">
+          Dialogamos con cada persona para traducir emociones en formas. Desde argollas hasta piezas únicas,
+          diseñamos pensando en la historia detrás de la joya.
+        </p>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="p-4 rounded-xl bg-white/70 backdrop-blur animate-reveal">
+            <p class="text-xs uppercase tracking-wide text-gray-500">Hecho a mano</p>
+            <p class="text-lg font-semibold text-gray-900">Pieza única</p>
+          </div>
+          <div class="p-4 rounded-xl bg-white/70 backdrop-blur animate-reveal">
+            <p class="text-xs uppercase tracking-wide text-gray-500">Garantía</p>
+            <p class="text-lg font-semibold text-gray-900">Ajustes & mantención</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="order-1 lg:order-2 relative min-h-[360px] lg:min-h-[540px] overflow-hidden">
+      <img src="{% static 'images/quienes/design.jpg' %}" alt="Bocetos y modelado de joyería"
+           class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+    </div>
+  </div>
+</section>
+
+<!-- CITA FULL-BLEED CON PARALLAX SUAVE -->
+<section class="relative w-full py-24 md:py-28 bg-fixed bg-center bg-cover"
+         style="background-image:url('{% static 'images/quienes/texture.jpg' %}')">
+  <div class="absolute inset-0 bg-black/50"></div>
+  <div class="relative max-w-4xl mx-auto text-center text-white px-6">
+    <blockquote class="text-2xl md:text-3xl font-semibold leading-relaxed animate-fade-up">
+      “Una joya bien hecha no solo se mira; se siente, se habita y te acompaña.”
+    </blockquote>
+  </div>
+</section>
+
+<!-- BANDA 3 · IMAGEN IZQUIERDA / TEXTO DERECHA -->
+<section class="w-full">
+  <div class="grid grid-cols-1 lg:grid-cols-2">
+    <div class="relative min-h-[360px] lg:min-h-[540px] overflow-hidden">
+      <img src="{% static 'images/quienes/craft.jpg' %}" alt="Detalle de engaste y pulido"
+           class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+    </div>
+    <div class="bg-white flex items-center">
+      <div class="max-w-xl mx-auto px-6 py-12 md:py-16">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4 animate-reveal">Materia prima responsable</h2>
+        <p class="text-gray-600 leading-relaxed mb-6 animate-reveal">
+          Seleccionamos proveedores con trazabilidad y estándares de calidad. Piedras y metales con origen responsable,
+          porque el brillo también es ética.
+        </p>
+        <a href="{% url 'store:argollas_matrimonio' %}"
+           class="inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F5E6CA] animate-reveal">
+          Conoce nuestras argollas
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALORES / ICONOS -->
+<section class="max-w-7xl mx-auto px-6 py-16">
+  <h3 class="text-2xl md:text-3xl font-bold text-center text-gray-900 mb-10">Nuestros valores</h3>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="p-6 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition animate-reveal">
+      <div class="w-12 h-12 rounded-2xl bg-[#F5E6CA] flex items-center justify-center text-[#5e0013] mb-4">
+        <i class="fa-solid fa-hammer"></i>
+      </div>
+      <h4 class="font-semibold text-gray-900 mb-2">Artesanía</h4>
+      <p class="text-sm text-gray-600">Proceso manual, control de calidad pieza a pieza.</p>
+    </div>
+    <div class="p-6 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition animate-reveal">
+      <div class="w-12 h-12 rounded-2xl bg-[#F5E6CA] flex items-center justify-center text-[#5e0013] mb-4">
+        <i class="fa-solid fa-leaf"></i>
+      </div>
+      <h4 class="font-semibold text-gray-900 mb-2">Responsabilidad</h4>
+      <p class="text-sm text-gray-600">Selección de materiales con trazabilidad y cuidado.</p>
+    </div>
+    <div class="p-6 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition animate-reveal">
+      <div class="w-12 h-12 rounded-2xl bg-[#F5E6CA] flex items-center justify-center text-[#5e0013] mb-4">
+        <i class="fa-solid fa-gem"></i>
+      </div>
+      <h4 class="font-semibold text-gray-900 mb-2">Durabilidad</h4>
+      <p class="text-sm text-gray-600">Estructuras pensadas para acompañarte toda la vida.</p>
+    </div>
+    <div class="p-6 rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition animate-reveal">
+      <div class="w-12 h-12 rounded-2xl bg-[#F5E6CA] flex items-center justify-center text-[#5e0013] mb-4">
+        <i class="fa-solid fa-heart"></i>
+      </div>
+      <h4 class="font-semibold text-gray-900 mb-2">Cercanía</h4>
+      <p class="text-sm text-gray-600">Acompañamiento, ajustes y mantención postventa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="relative w-full py-16">
+  <div class="max-w-5xl mx-auto px-6 text-center">
+    <h3 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">¿Diseñamos algo para ti?</h3>
+    <p class="text-gray-600 mb-6">Cuéntanos tu idea y la convertimos en una pieza única.</p>
+    <div class="flex items-center justify-center gap-3">
+      <a href="{% url 'store:contacto' %}"
+         class="inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F5E6CA]">
+        Contacto
+      </a>
+      <a href="{% url 'store:product_list' %}"
+         class="inline-flex items-center gap-2 rounded-lg bg-gray-900 hover:bg-black text-white font-semibold py-3 px-5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+        Ver piezas disponibles
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Animaciones: utilidades ligeras + observer -->
+<style>
+  @keyframes fadeUp { from { opacity:0; transform: translateY(12px) } to { opacity:1; transform: translateY(0) } }
+  .animate-fade-up { opacity:0; animation: fadeUp .8s ease forwards; }
+  .animate-reveal { opacity:0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+  .animate-reveal.in-view { opacity:1; transform: translateY(0); }
+  /* Delay util con bracket para Tailwind JIT (ver clases [animation-delay:*]) */
+  .[animation-delay\:80ms]{ animation-delay:80ms }
+  .[animation-delay\:120ms]{ animation-delay:120ms }
+  .[animation-delay\:180ms]{ animation-delay:180ms }
+</style>
+<script>
+  // Revela bloques al entrar en viewport
+  const els = document.querySelectorAll('.animate-reveal');
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in-view'); io.unobserve(e.target); }
+    })
+  }, { threshold: 0.15 });
+  els.forEach(el=>io.observe(el));
+</script>
+
 {% endblock %}

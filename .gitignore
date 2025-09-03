@@ -1,0 +1,4 @@
+# en .gitignore
+.env
+*.env
+/staticfiles/

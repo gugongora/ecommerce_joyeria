@@ -22,4 +22,6 @@ urlpatterns = [
     path('servicios/argollas-compromiso/', views.argollas_compromiso, name='argollas_compromiso'),
     path('servicios/reparaciones/', views.reparaciones, name='reparaciones'),
     path('servicios/mantenimiento-relojeria/', views.mantenimiento_relojeria, name='mantenimiento_relojeria'),
+    # Footer
+    path("guia-tallas-anillos/", views.guia_tallas_anillos, name="guia_tallas_anillos"),
 ]

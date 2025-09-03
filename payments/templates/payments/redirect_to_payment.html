@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto text-center py-16">
+  <h1 class="text-2xl font-bold text-gray-900 mb-2">Redirigiendo a Webpay…</h1>
+  <p class="text-gray-600">Por favor espera, estamos enviándote a la página de pago segura.</p>
+  <form id="tbkForm" method="POST" action="{{ url }}">
+    <input type="hidden" name="token_ws" value="{{ token }}">
+    <noscript>
+      <button type="submit" class="mt-6 inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5">
+        Continuar a Webpay
+      </button>
+    </noscript>
+  </form>
+</div>
+<script>document.getElementById('tbkForm').submit();</script>
+{% endblock %}

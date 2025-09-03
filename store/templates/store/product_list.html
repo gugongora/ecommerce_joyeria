@@ -6,79 +6,99 @@
 
 {% block hero %}
 
-<!-- Carrusel Hero - Full width corregido -->
-<div class="relative overflow-hidden mb-4 shadow-lg h-[900px] w-full">
-  <div class="relative h-full w-full overflow-hidden">
+<!-- Hero Carousel -->
+<div class="relative overflow-hidden mb-6 shadow-lg w-full h-[62vh] md:h-[72vh] lg:h-[80vh] rounded-none md:rounded-xl">
+  <!-- Vignette / gradiente para legibilidad -->
+  <div class="pointer-events-none absolute inset-0 z-[5]">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+    <div class="absolute inset-0 ring-1 ring-black/5"></div>
+  </div>
 
-    <!-- Slide 1 -->
-    <div class="absolute inset-0 transition-opacity duration-1000 opacity-100 carousel-item">
-      <img src="{% static 'images/carrusel1.jpg' %}" alt="Carrusel 1"
-           class="absolute inset-0 h-full w-full object-cover z-0" />
-      <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-12 max-w-2xl">
-        <h2 class="text-5xl font-bold text-white mb-4 drop-shadow-lg leading-tight">
-          Joyas hechas a medida con alma y oficio
-        </h2>
-        <p class="text-white text-lg mb-6 drop-shadow">Diseños únicos y reparaciones que perduran en el tiempo.</p>
-        <a href="#catalogo"
-           class="bg-transparent border border-white text-white font-semibold px-5 py-2 rounded hover:bg-white hover:text-gray-900 transition">
-          Solicitar diseño personalizado
-        </a>
-      </div>
+  <!-- Slide 1 -->
+  <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-[900ms] ease-out" aria-hidden="true">
+    <img src="{% static 'images/carrusel1.jpg' %}" alt="Joyas a medida"
+         class="absolute inset-0 h-full w-full object-cover will-change-transform animate-kenburns-slow" />
+    <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-6 sm:px-10 md:px-16 max-w-2xl">
+      <span class="hero-kicker inline-block text-xs tracking-[.2em] uppercase text-white/80">Hecho a mano en Chile</span>
+      <h2 class="hero-title text-4xl md:text-5xl font-bold text-white mt-2 drop-shadow leading-tight">
+        Joyas hechas a medida con alma y oficio
+      </h2>
+      <p class="hero-subtitle text-white/95 text-base md:text-lg mt-4">
+        Diseños únicos y reparaciones que perduran en el tiempo.
+      </p>
+
+      <a href="#catalogo"
+         class="hero-cta group inline-flex items-center gap-2 mt-6 rounded-full border border-white/30 bg-white/10 px-5 py-2.5
+                text-white backdrop-blur-[2px] transition-all duration-300
+                hover:bg-white hover:text-gray-900 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50">
+        Solicitar diseño personalizado
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
     </div>
+  </div>
 
-    <!-- Slide 2 -->
-    <div class="absolute inset-0 transition-opacity duration-1000 opacity-0 carousel-item">
-      <img src="{% static 'images/carrusel2.jpg' %}" alt="Carrusel 2"
-           class="absolute inset-0 h-full w-full object-cover z-0" />
-      <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-12 max-w-2xl">
-        <h2 class="text-5xl font-bold text-white mb-4 drop-shadow-lg leading-tight">
-          Hecho a tu medida
-        </h2>
-        <p class="text-white text-lg mb-6 drop-shadow">Creamos y restauramos piezas que cuentan tu historia.</p>
-        <a href="#catalogo"
-           class="bg-transparent border border-white text-white font-semibold px-5 py-2 rounded hover:bg-white hover:text-gray-900 transition">
-          Comprar ahora
-        </a>
-      </div>
+  <!-- Slide 2 -->
+  <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-[900ms] ease-out" aria-hidden="true">
+    <img src="{% static 'images/carrusel2.jpg' %}" alt="Hecho a tu medida"
+         class="absolute inset-0 h-full w-full object-cover will-change-transform animate-kenburns-slow" />
+    <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-6 sm:px-10 md:px-16 max-w-2xl">
+      <span class="hero-kicker inline-block text-xs tracking-[.2em] uppercase text-white/80">Oficio orfebre</span>
+      <h2 class="hero-title text-4xl md:text-5xl font-bold text-white mt-2 drop-shadow leading-tight">
+        Hecho a tu medida
+      </h2>
+      <p class="hero-subtitle text-white/95 text-base md:text-lg mt-4">
+        Creamos y restauramos piezas que cuentan tu historia.
+      </p>
+
+      <a href="#catalogo"
+         class="hero-cta group inline-flex items-center gap-2 mt-6 rounded-full border border-white/30 bg-white/10 px-5 py-2.5
+                text-white backdrop-blur-[2px] transition-all duration-300
+                hover:bg-white hover:text-gray-900 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50">
+        Comprar ahora
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+      </a>
     </div>
+  </div>
 
-
-    <!-- Indicadores tipo "dots" -->
-    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3" id="carousel-dots">
-      <button class="w-3 h-3 rounded-full bg-white opacity-60 hover:opacity-100 transition" data-slide="0"></button>
-      <button class="w-3 h-3 rounded-full bg-white opacity-30 hover:opacity-100 transition" data-slide="1"></button>
-    </div>
-
+  <!-- Dots -->
+  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2" id="carousel-dots">
+    <button class="h-2.5 w-2.5 rounded-full bg-white/80 ring-1 ring-white/50 opacity-40 scale-90 transition-all" data-slide="0"></button>
+    <button class="h-2.5 w-2.5 rounded-full bg-white/80 ring-1 ring-white/50 opacity-40 scale-90 transition-all" data-slide="1"></button>
   </div>
 </div>
 
-
-  </div>
-</div>
 {% endblock %}
 
 {% block content %}
 <!-- Catálogo de productos tipo slider con flechas -->
-<div id="catalogo" class="w-full pt-2 pb-8 relative overflow-x-hidden">
-  <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Catálogo de Productos</h2>
+<div id="catalogo" class="w-full pt-2 pb-6 relative overflow-x-hidden">
+  <div class="text-center mb-5">
+    <h2 class="text-gray-900 font-semibold tracking-tight text-[22px] md:text-[28px] leading-tight">
+      Catálogo de productos
+    </h2>
+    <div class="mx-auto mt-2 h-[3px] w-16 rounded bg-gradient-to-r from-[#5e0013] to-[#c7233c]"></div>
+  </div>
 
   <!-- Contenedor con flechas -->
   <div class="relative w-full overflow-x-hidden">
     
     <!-- Botón izquierda -->
-    <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 z-50 bg-[#5e0013] text-white rounded-full p-2 hover:bg-[#83041e] shadow-md">
+    <button id="prevBtn"
+            class="absolute left-2 top-1/2 -translate-y-1/2 z-50 bg-[#5e0013] text-white rounded-full p-2 hover:bg-[#83041e] shadow-md">
       <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
     </button>
 
     <!-- Slider -->
-    <div id="product-slider" class="flex overflow-x-auto space-x-6 scrollbar-hide py-4 scroll-smooth w-full">
+    <div id="product-slider"
+         class="flex overflow-x-auto space-x-4 sm:space-x-5 scrollbar-hide py-3 scroll-smooth w-full">
       <p class="text-gray-500 ml-6">Cargando productos...</p>
     </div>
 
     <!-- Botón derecha -->
-    <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 z-50 bg-[#5e0013] text-white rounded-full p-2 hover:bg-[#83041e] shadow-md">
+    <button id="nextBtn"
+            class="absolute right-2 top-1/2 -translate-y-1/2 z-50 bg-[#5e0013] text-white rounded-full p-2 hover:bg-[#83041e] shadow-md">
       <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
       </svg>
@@ -87,227 +107,194 @@
   </div>
 </div>
 
-
-
-
 <!-- Ocultar scrollbar -->
 <style>
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
-
-<!-- Servicios destacados del Maestro Orfebre - Estilo expandido 2 columnas -->
-<section class="w-full py-10 bg-white">
-  <h3 class="text-3xl font-semibold text-center text-gray-800 mb-12">Servicios destacados</h3>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
-    
-    <!-- Pedidos Personalizados -->
-    <div class="relative w-full h-[550px] overflow-hidden group">
-      <img src="{% static 'images/servicios/pedidos.jpg' %}" alt="Pedidos exclusivos" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-      <div class="absolute bottom-0 left-0 right-0 bg-white bg-opacity-90 p-6 text-center">
-        <h4 class="text-lg font-semibold text-gray-800 uppercase mb-2">Pedidos Exclusivos</h4>
-        <a href="{% url 'store:quienes_somos' %}#personalizados" class="inline-block border border-gray-800 text-gray-800 px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition">VER MÁS</a>
-      </div>
+<!-- Servicios destacados (full-bleed lateral) -->
+<section id="servicios-destacados" class="relative w-full py-4 bg-gradient-to-b from-white to-gray-50/60 scroll-mt-[120px]">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <span class="inline-block text-[11px] tracking-widest uppercase text-[#5e0013]/70">Nuestros servicios</span>
+      <h3 class="mt-2 text-3xl md:text-4xl font-semibold text-gray-800">Servicios destacados</h3>
     </div>
 
-    <!-- Argollas de Matrimonio -->
-    <div class="relative w-full h-[550px] overflow-hidden group">
-      <img src="{% static 'images/servicios/argollas.jpg' %}" alt="Argollas de matrimonio" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-      <div class="absolute bottom-0 left-0 right-0 bg-white bg-opacity-90 p-6 text-center">
-        <h4 class="text-lg font-semibold text-gray-800 uppercase mb-2">Argollas de Matrimonio</h4>
-        <a href="{% url 'store:quienes_somos' %}#argollas" class="inline-block border border-gray-800 text-gray-800 px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition">VER MÁS</a>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      <!-- Pedidos (izquierda) -->
+      <div class="bleed-left">
+        <a href="{% url 'store:quienes_somos' %}#personalizados"
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
+           aria-label="Ver más sobre pedidos exclusivos">
+          <img src="{% static 'images/servicios/pedidos.jpg' %}" alt="Pedidos exclusivos"
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
+               loading="lazy" decoding="async">
+          <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
+          <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
+            <div class="panel translate-y-0 opacity-100 transition duration-300">
+              <h4 class="text-white text-xl font-semibold">Pedidos Exclusivos</h4>
+              <p class="mt-1.5 text-white/85 text-sm">Creamos piezas únicas a tu medida, con asesoría experta.</p>
+              <span class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/95 text-[#5e0013] text-sm font-medium group-hover:translate-x-0.5 transition-transform">
+                Ver más
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+          <span class="shine pointer-events-none"></span>
+        </a>
+      </div>
+
+      <!-- Argollas (derecha) -->
+      <div class="bleed-right">
+        <a href="{% url 'store:quienes_somos' %}#argollas"
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
+           aria-label="Ver más sobre argollas de matrimonio">
+          <img src="{% static 'images/servicios/argollas.jpg' %}" alt="Argollas de matrimonio"
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
+               loading="lazy" decoding="async">
+          <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
+          <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
+            <div class="panel translate-y-0 opacity-100 transition duration-300">
+              <h4 class="text-white text-xl font-semibold">Argollas de Matrimonio</h4>
+              <p class="mt-1.5 text-white/85 text-sm">Diseños atemporales hechos a mano para su gran día.</p>
+              <span class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/95 text-[#5e0013] text-sm font-medium group-hover:translate-x-0.5 transition-transform">
+                Ver más
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+          <span class="shine pointer-events-none"></span>
+        </a>
+      </div>
+
+      <!-- Reparaciones (izquierda) -->
+      <div class="bleed-left">
+        <a href="{% url 'store:quienes_somos' %}#reparaciones"
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
+           aria-label="Ver más sobre reparaciones">
+          <img src="{% static 'images/servicios/reparaciones.jpg' %}" alt="Reparaciones"
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
+               loading="lazy" decoding="async">
+          <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
+          <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
+            <div class="panel translate-y-0 opacity-100 transition duration-300">
+              <h4 class="text-white text-xl font-semibold">Reparaciones</h4>
+              <p class="mt-1.5 text-white/85 text-sm">Recupera el valor sentimental y la belleza de tus joyas.</p>
+              <span class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/95 text-[#5e0013] text-sm font-medium group-hover:translate-x-0.5 transition-transform">
+                Ver más
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+          <span class="shine pointer-events-none"></span>
+        </a>
+      </div>
+
+      <!-- Garantía & Ajustes (derecha) -->
+      <div class="bleed-right">
+        <a href="{% url 'store:quienes_somos' %}#garantia"
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
+           aria-label="Ver más sobre garantía y ajustes">
+          <img src="{% static 'images/servicios/garantia.jpg' %}" alt="Garantía y ajustes"
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
+               loading="lazy" decoding="async">
+          <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
+          <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
+            <div class="panel translate-y-0 opacity-100 transition duration-300">
+              <h4 class="text-white text-xl font-semibold">Garantía & Ajustes</h4>
+              <p class="mt-1.5 text-white/85 text-sm">Servicio postventa de ajustes y mantenimiento especializado.</p>
+              <span class="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/95 text-[#5e0013] text-sm font-medium group-hover:translate-x-0.5 transition-transform">
+                Ver más
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </div>
+          <span class="shine pointer-events-none"></span>
+        </a>
       </div>
     </div>
-
-
-
-
-    <!-- Reparaciones -->
-    <div class="relative w-full h-[550px] overflow-hidden group">
-      <img src="{% static 'images/servicios/reparaciones.jpg' %}" alt="Reparaciones" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-      <div class="absolute bottom-0 left-0 right-0 bg-white bg-opacity-90 p-6 text-center">
-        <h4 class="text-lg font-semibold text-gray-800 uppercase mb-2">Reparaciones</h4>
-        <a href="{% url 'store:quienes_somos' %}#reparaciones" class="inline-block border border-gray-800 text-gray-800 px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition">VER MÁS</a>
-      </div>
-    </div>
-
-
-
-
-
-    <!-- Garantía y Ajustes -->
-    <div class="relative w-full h-[550px] overflow-hidden group">
-      <img src="{% static 'images/servicios/garantia.jpg' %}" alt="Garantía y ajustes" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-      <div class="absolute bottom-0 left-0 right-0 bg-white bg-opacity-90 p-6 text-center">
-        <h4 class="text-lg font-semibold text-gray-800 uppercase mb-2">Garantía & Ajustes</h4>
-        <a href="{% url 'store:quienes_somos' %}#garantia" class="inline-block border border-gray-800 text-gray-800 px-4 py-2 rounded hover:bg-gray-800 hover:text-white transition">VER MÁS</a>
-      </div>
-    </div>
-
   </div>
 </section>
 
-
-
-
-
 <!-- Sección Somos -->
-<section class="w-full flex flex-col lg:flex-row mt-10">
-
-  <!-- Imagen lado izquierdo -->
-  <div class="w-full lg:w-1/2 h-[500px]">
-    <img src="{% static 'images/somos-joyas.jpg' %}" alt="Joyas en arena" class="w-full h-full object-cover">
+<section id="somos" class="w-full flex flex-col lg:flex-row mt-10 overflow-hidden">
+  <!-- Imagen -->
+  <div class="w-full lg:w-1/2 h-[520px] relative group reveal">
+    <img
+      src="{% static 'images/somos-joyas.jpg' %}"
+      alt="Joyas en arena"
+      class="w-full h-full object-cover transform-gpu scale-[1.02] group-hover:scale-105 transition-transform duration-700 ease-out will-change-transform"
+      loading="lazy" decoding="async"
+    />
+    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-700"></div>
   </div>
 
-  <!-- Texto con fondo lado derecho -->
-  <div class="w-full lg:w-1/2 h-[500px] relative bg-cover bg-center" style="background-image: url('{% static 'images/somos-fondo.jpg' %}');">
-    <div class="absolute inset-0 bg-[#5e0013]/60"></div> <!-- Capa oscura semi-transparente -->
-    <div class="relative z-10 text-white p-10 flex flex-col justify-center h-full">
-      <h3 class="text-2xl md:text-3xl font-semibold mb-4">SOMOS</h3>
-      <p class="mb-4">
+  <!-- Texto -->
+  <div
+    class="w-full lg:w-1/2 h-[520px] relative bg-cover bg-center reveal-x"
+    style="background-image: url('{% static 'images/somos-fondo.jpg' %}');"
+  >
+    <div class="absolute inset-0 bg-[#5e0013]/60"></div>
+
+    <div class="relative z-10 text-white p-8 md:p-10 flex flex-col justify-center h-full">
+      <span class="inline-flex items-center gap-2 text-[11px] tracking-widest uppercase text-[#F5E6CA]/90 mb-1">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a1 1 0 0 1 .894.553l2.382 4.76 5.255.764a1 1 0 0 1 .554 1.704l-3.8 3.703.896 5.224a1 1 0 0 1-1.45 1.054L12 18.769l-4.681 2.463a1 1 0 0 1-1.45-1.054l.897-5.224-3.8-3.703A1 1 0 0 1 3.47 8.077l5.255-.764 2.382-4.76A1 1 0 0 1 12 2Z"/></svg>
+        Más de medio siglo de oficio
+      </span>
+
+      <h3 class="text-2xl md:text-3xl font-semibold mb-3">SOMOS</h3>
+
+      <p class="mb-3 text-white/95 leading-relaxed">
         Nuestras obras son una delicada combinación de esmero, talento y experiencia.
       </p>
-      <p class="mb-4">
+      <p class="mb-3 text-white/95 leading-relaxed">
         Descubra las piezas de joyería que creamos hoy con pasión y con la trayectoria del legado acumulado por más de medio siglo en el oficio de la orfebrería.
       </p>
-      <p class="mb-6">
-        Trabajamos con un equipo de maestros orfebres de excelencia para materializar diseños únicos que lo acompañarán a través del tiempo, convirtiéndose en fiel reflejo de su historia.
+      <p class="mb-6 text-white/95 leading-relaxed">
+        Trabajamos con un equipo de maestros orfebres de excelencia para materializar diseños únicos que lo acompañarán a través del tiempo, reflejando su historia.
       </p>
-      <a href="{% url 'store:quienes_somos' %}" class="border border-white px-5 py-2 text-white hover:bg-white hover:text-[#5e0013] transition w-fit">
-        ver más
+
+      <a
+        href="{% url 'store:quienes_somos' %}"
+        class="inline-flex items-center gap-2 border border-white/90 px-5 py-2 rounded-lg text-white/95 hover:bg-white hover:text-[#5e0013] transition-colors duration-300 w-fit focus:outline-none focus:ring-2 focus:ring-white/60"
+      >
+        Ver más
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
-
 </section>
 
-<!-- Beneficios Artesanales -->
-<section class="bg-white border-t border-gray-300 py-10">
+<!-- Beneficios -->
+<section class="bg-white border-top border-gray-300 py-10">
   <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-sm text-gray-700">
-    
-    <!-- Atención personalizada -->
     <div>
       <i class="fas fa-hands-helping text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Atención Personalizada</h4>
       <p>Te acompañamos en cada paso para crear la pieza perfecta, única y significativa.</p>
     </div>
-
-    <!-- Hecho a mano -->
     <div>
       <i class="fas fa-gem text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Joyas Hechas a Mano</h4>
       <p>Diseños elaborados artesanalmente con precisión, esmero y tradición orfebre.</p>
     </div>
-
-    <!-- Entrega especial -->
     <div>
       <i class="fas fa-box-open text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Presentación con Historia</h4>
       <p>Cada pieza se entrega en estuche o caja.</p>
     </div>
-
-    <!-- Garantía -->
     <div>
       <i class="fas fa-shield-alt text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Garantía y Reparaciones</h4>
       <p>Respaldamos nuestro trabajo con garantía y servicio de mantenimiento especializado.</p>
     </div>
-
   </div>
 </section>
 
+<!-- ===== SCRIPTS ESPECÍFICOS DE ESTA PÁGINA ===== -->
 
-
-
-<!-- Carrusel JS -->
-<script>
-  const productSlider = document.getElementById('product-slider');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-
-  function cargarProductosDesdeAPI() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const categoria = urlParams.get('categoria');
-    const marca = urlParams.get('marca');
-
-    let apiURL = `${API_BASE_URL}productos/`;
-    const filtros = [];
-
-    if (categoria) filtros.push(`categoria=${categoria}`);
-    if (marca) filtros.push(`marca=${marca}`);
-    if (filtros.length > 0) apiURL += '?' + filtros.join('&');
-
-    fetch(apiURL)
-      .then(response => {
-        if (!response.ok) throw new Error(`Error al obtener productos: ${response.status}`);
-        return response.json();
-      })
-      .then(data => {
-        productSlider.innerHTML = '';
-
-        if (!data.results || data.results.length === 0) {
-          productSlider.innerHTML = '<p class="text-center text-red-600">No hay productos disponibles.</p>';
-          return;
-        }
-
-        data.results.forEach(product => {
-          const card = document.createElement('div');
-          card.className = 'min-w-[250px] bg-white border border-gray-200 rounded-lg shadow p-4 hover:shadow-lg transition duration-300 flex-shrink-0';
-
-          const imageSrc = product.imagen_url || '{% static "images/no-image.jpg" %}';
-          const precio = product.precio_actual ?? 0;
-
-          card.innerHTML = `
-            <img src="${imageSrc}" alt="${product.nombre}" class="w-full h-40 object-cover rounded mb-3">
-            <h3 class="text-base font-semibold text-gray-800 mb-1">${product.nombre}</h3>
-            <p class="text-sm text-gray-600 mb-2">${product.descripcion?.slice(0, 60) || ''}</p>
-            <p class="text-lg font-bold text-gray-900 mb-3">
-              ${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', minimumFractionDigits: 0 }).format(precio)}
-            </p>
-            <div class="flex flex-col gap-2">
-              <a href="/store/producto/${product.id}/" 
-                 class="text-center border border-black text-black hover:bg-black hover:text-white font-medium py-1.5 rounded">
-                Ver detalles
-              </a>
-              <form action="/cart/add/${product.id}/" method="post">
-                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
-                <button type="submit" 
-                        class="w-full bg-black hover:bg-gray-800 text-white font-medium py-1.5 rounded">
-                  Agregar al carrito
-                </button>
-              </form>
-            </div>
-          `;
-
-          productSlider.appendChild(card);
-        });
-      })
-      .catch(error => {
-        productSlider.innerHTML = `<p class="text-center text-red-600">Error: ${error.message}</p>`;
-      });
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    cargarProductosDesdeAPI();
-
-    prevBtn.addEventListener('click', () => {
-      productSlider.scrollBy({ left: -300, behavior: 'smooth' });
-    });
-
-    nextBtn.addEventListener('click', () => {
-      productSlider.scrollBy({ left: 300, behavior: 'smooth' });
-    });
-  });
-</script>
-
-
+<!-- Carrusel hero -->
 <script>
   const slides = document.querySelectorAll('.carousel-item');
   const dots = document.querySelectorAll('#carousel-dots button');
@@ -315,33 +302,196 @@
 
   function showSlide(index) {
     slides.forEach((slide, i) => {
-      slide.style.opacity = (i === index) ? '1' : '0';
+      const active = i === index;
+      slide.style.opacity = active ? '1' : '0';
+      slide.setAttribute('aria-hidden', String(!active));
+      slide.classList.toggle('is-active', active);
     });
+
     dots.forEach((dot, i) => {
-      dot.classList.toggle('opacity-60', i === index);
-      dot.classList.toggle('opacity-30', i !== index);
+      const active = i === index;
+      dot.classList.toggle('opacity-90', active);
+      dot.classList.toggle('scale-100', active);
+      dot.classList.toggle('opacity-40', !active);
+      dot.classList.toggle('scale-90', !active);
     });
+
     currentSlide = index;
   }
 
-  dots.forEach(dot => {
-    dot.addEventListener('click', () => {
-      const index = parseInt(dot.dataset.slide);
-      showSlide(index);
-    });
-  });
-
-  // Opcional: rotación automática cada 6 segundos
   setInterval(() => {
     const next = (currentSlide + 1) % slides.length;
     showSlide(next);
   }, 10000);
 
-  // Mostrar primer slide por defecto
   showSlide(0);
 </script>
+<style>
+  @keyframes kenburns-slow { from { transform: scale(1.04); } to { transform: scale(1.08); } }
+  .animate-kenburns-slow { animation: kenburns-slow 18s ease-in-out infinite alternate; }
 
+  .hero-kicker, .hero-title, .hero-subtitle, .hero-cta {
+    opacity: 0; transform: translateY(10px);
+  }
+  .carousel-item.is-active .hero-kicker,
+  .carousel-item.is-active .hero-title,
+  .carousel-item.is-active .hero-subtitle,
+  .carousel-item.is-active .hero-cta {
+    opacity: 1; transform: none;
+  }
+  .carousel-item.is-active .hero-kicker   { transition: opacity .6s ease, transform .6s ease; transition-delay: .05s; }
+  .carousel-item.is-active .hero-title    { transition: opacity .6s ease, transform .6s ease; transition-delay: .12s; }
+  .carousel-item.is-active .hero-subtitle { transition: opacity .6s ease, transform .6s ease; transition-delay: .20s; }
+  .carousel-item.is-active .hero-cta      { transition: opacity .6s ease, transform .6s ease; transition-delay: .30s; }
+</style>
 
+<!-- Animaciones de revelado -->
+<style>
+  #somos .reveal { opacity: 0; transform: translateY(18px); }
+  #somos .reveal-x { opacity: 0; transform: translateX(24px); }
+  #somos .is-visible {
+    opacity: 1; transform: none;
+    transition: opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1);
+    will-change: opacity, transform;
+  }
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const targets = document.querySelectorAll('#somos .reveal, #somos .reveal-x');
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+    targets.forEach(t => io.observe(t));
+  });
+</script>
 
+<!-- Servicios destacados: reveal -->
+<style>
+  .service-reveal { opacity: 0; transform: translateY(14px) scale(.98); }
+  .service-reveal.is-in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1); }
+  .service-card .panel { opacity: 1; transform: none; }
+  .service-card:hover .panel { transform: translateY(-2px); }
+  .service-card .overlay { opacity: .38; }
+  .service-card:hover .overlay { opacity: .52; }
+  .service-card .shine::before {
+    content: ""; position: absolute; inset: -120% -50% auto -50%;
+    height: 300%; width: 60%;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.16) 40%, rgba(255,255,255,.08) 60%, transparent 100%);
+    transform: rotate(20deg) translateY(-20%); opacity: 0; pointer-events: none;
+  }
+  .service-card:hover .shine::before { animation: shineSweep 1.2s ease forwards; }
+  @keyframes shineSweep {
+    0% { transform: rotate(20deg) translate(-20%, -20%); opacity: 0; }
+    35% { opacity: 1; }
+    100% { transform: rotate(20deg) translate(140%, 20%); opacity: 0; }
+  }
+</style>
 
+<!-- Ajustes de sangrado lateral -->
+<style>
+  :root { --container-max: 80rem; --container-pad: 1rem; }
+  @media (min-width: 768px) {
+    .bleed-left  { margin-left:  calc(-1 * ((max(0px, 100vw - var(--container-max)) / 2) + var(--container-pad))); }
+    .bleed-right { margin-right: calc(-1 * ((max(0px, 100vw - var(--container-max)) / 2) + var(--container-pad))); }
+  }
+</style>
+
+<!-- Carga de productos (único bloque) -->
+<script>
+  (function(){
+    const productSlider = document.getElementById('product-slider');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function fmtCLP(v){
+      try { return new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(v||0); }
+      catch(e){ return '$' + Math.round(v||0); }
+    }
+
+    function cardHTML(p){
+      const img  = p.imagen_url || "{% static 'images/no-image.jpg' %}";
+      const desc = (p.descripcion || '').slice(0, 110);
+      return `
+        <a href="/store/producto/${p.id}/" class="group block min-w-[210px] sm:min-w-[240px] md:min-w-[260px]">
+          <img src="${img}" alt="${(p.nombre || '').replace(/"/g,'&quot;')}"
+               class="h-[240px] sm:h-[280px] md:h-[300px] w-full object-cover rounded-md shadow transition-transform duration-300 group-hover:scale-[1.02]"
+               loading="lazy" decoding="async"/>
+          <div class="mt-3 flex justify-between gap-3">
+            <div class="pr-1">
+              <h3 class="text-[15px] md:text-[16px] font-semibold text-gray-900 group-hover:underline group-hover:underline-offset-4">
+                ${p.nombre || ''}
+              </h3>
+              <p class="mt-1 text-[13px] md:text-[14px] text-gray-700 font-medium leading-snug">
+                ${desc}
+              </p>
+            </div>
+            <p class="text-gray-900 font-extrabold text-[14px] md:text-[16px] whitespace-nowrap">
+              ${fmtCLP(p.precio_actual)}
+            </p>
+          </div>
+        </a>
+      `;
+    }
+
+    async function cargarProductosDesdeAPI(){
+      const API = document.body?.dataset?.apiBaseUrl || '';
+      if (!API) { console.warn('API base vacía'); return; }
+
+      try{
+        const params = new URLSearchParams(location.search);
+        const qs = [];
+        if (params.get('categoria')) qs.push('categoria=' + params.get('categoria'));
+        if (params.get('marca')) qs.push('marca=' + params.get('marca'));
+
+        const url = `${API}productos/${qs.length ? '?' + qs.join('&') : ''}`;
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : (data.results || []);
+
+        if(!items.length){
+          productSlider.innerHTML = '<p class="text-center text-gray-500 ml-6">No hay productos disponibles.</p>';
+          return;
+        }
+
+        productSlider.innerHTML = items.map(cardHTML).join('');
+      } catch (e){
+        productSlider.innerHTML = `<p class="text-center text-red-600 ml-6">Error: ${e.message}</p>`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      cargarProductosDesdeAPI();
+      prevBtn.addEventListener('click', () => productSlider.scrollBy({ left: -350, behavior: 'smooth' }));
+      nextBtn.addEventListener('click', () => productSlider.scrollBy({ left: 350, behavior: 'smooth' }));
+    });
+  })();
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const items = document.querySelectorAll('#servicios-destacados .service-reveal');
+
+    // Fallback si no hay IntersectionObserver
+    if (!('IntersectionObserver' in window) || !items.length) {
+      items.forEach(el => el.classList.add('is-in'));
+      return;
+    }
+
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in'); // <- esto quita la opacidad 0
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    items.forEach(el => io.observe(el));
+  });
+</script>
 {% endblock %}

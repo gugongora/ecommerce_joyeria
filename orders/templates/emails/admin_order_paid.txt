@@ -1,0 +1,9 @@
+{% load humanize %}
+[ADMIN] Pedido pagado #{{ order.id }}
+
+Usuario: {{ order.user.get_full_name }} ({{ order.user.email }})
+Total: ${{ order.total|intcomma }}
+Items:
+{% for it in order.items.all %}
+- {{ it.product_name }} x {{ it.quantity }} - ${{ it.subtotal|intcomma }}
+{% endfor %}

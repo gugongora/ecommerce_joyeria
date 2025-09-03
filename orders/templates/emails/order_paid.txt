@@ -1,0 +1,18 @@
+{% load humanize %}
+¡Gracias por tu compra!
+
+Pedido #{{ order.id }}
+------------------------------------
+{% for it in order.items.all %}
+- {{ it.product_name }} x {{ it.quantity }} - ${{ it.subtotal|intcomma }}
+{% endfor %}
+Total pagado: ${{ order.total|intcomma }}
+
+{% if order.shipping_data %}
+Envío:
+{{ order.shipping_data.address }}{% if order.shipping_data.address2 %}, {{ order.shipping_data.address2 }}{% endif %}
+Comuna: {{ order.shipping_data.comuna }} - Región: {{ order.shipping_data.region }}
+Método: {% if order.shipping_data.shipping_method == 'home' %}Envío a domicilio{% else %}Retiro en taller{% endif %}
+{% endif %}
+
+Te avisaremos cuando tu pedido esté en camino.

@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+  <!-- Steps -->
+  <div class="mb-6">
+    <ol class="grid grid-cols-3 gap-2 text-xs md:text-sm">
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700">1</span>
+        Carrito
+      </li>
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700">2</span>
+        Datos & Envío
+      </li>
+      <li class="flex items-center gap-2 p-3 rounded-lg
+                 {% if estado == 'success' %}bg-emerald-50 text-emerald-700 border border-emerald-200{% elif estado == 'failed' %}bg-rose-50 text-rose-700 border border-rose-200{% else %}bg-[#F5E6CA] text-[#5e0013] border border-[#e8d6b5]{% endif %}">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center
+                     {% if estado == 'success' %}bg-emerald-600 text-white{% elif estado == 'failed' %}bg-rose-600 text-white{% else %}bg-[#5e0013] text-white{% endif %}">3</span>
+        Pago
+      </li>
+    </ol>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Columna principal -->
+    <section class="lg:col-span-2 space-y-6">
+      <!-- Encabezado estado -->
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        {% if estado == 'success' %}
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-emerald-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+            <div>
+              <h1 class="text-2xl font-bold text-emerald-700">¡Pago exitoso!</h1>
+              <p class="text-gray-700 mt-1">Gracias por tu compra. Tu orden <strong>#{{ order.id }}</strong> fue procesada correctamente.</p>
+              <p class="text-sm text-gray-500 mt-1">Te enviaremos un correo con el detalle. Si tienes dudas, contáctanos.</p>
+            </div>
+          </div>
+        {% elif estado == 'failed' %}
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-rose-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M4.93 4.93l14.14 14.14"/></svg>
+            <div>
+              <h1 class="text-2xl font-bold text-rose-700">No pudimos completar el pago</h1>
+              <p class="text-gray-700 mt-1">Tu orden <strong>#{{ order.id }}</strong> no fue autorizada o se canceló.</p>
+              {% if mensaje %}
+                <p class="text-sm text-gray-600 mt-2"><span class="font-medium">Detalle:</span> {{ mensaje }}</p>
+              {% endif %}
+              {% if detalle.response_code %}<p class="text-xs text-gray-500 mt-1">Código Webpay: {{ detalle.response_code }}</p>{% endif %}
+            </div>
+          </div>
+        {% else %}
+          <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-amber-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M9.93 4.93l10.14 10.14"/></svg>
+            <div>
+              <h1 class="text-2xl font-bold text-gray-900">Pago en revisión</h1>
+              <p class="text-gray-700 mt-1">Estamos validando el estado del pago de tu orden <strong>#{{ order.id }}</strong>.</p>
+              <p class="text-sm text-gray-600 mt-1">Actualizaremos el estado en unos instantes. Si ves algún problema, contáctanos.</p>
+            </div>
+          </div>
+        {% endif %}
+
+        <!-- Botones -->
+        <div class="mt-6 flex flex-wrap gap-3">
+          {% if estado == 'success' %}
+            <a href="{% url 'orders:order_confirmation' order.id %}"
+               class="inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5">
+              Ver comprobante
+            </a>
+            <a href="{% url 'store:product_list' %}"
+               class="inline-flex items-center gap-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium py-3 px-5">
+              Seguir comprando
+            </a>
+            <a href="{% url 'orders:mis_pedidos' %}"
+               class="inline-flex items-center gap-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium py-3 px-5">
+              Mis pedidos
+            </a>
+          {% elif estado == 'failed' %}
+            <a href="{% url 'orders:checkout_pay' %}"
+               class="inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5">
+              Intentar pagar nuevamente
+            </a>
+            <a href="{% url 'orders:checkout_shipping' %}"
+               class="inline-flex items-center gap-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium py-3 px-5">
+              Volver a datos & envío
+            </a>
+          {% else %}
+            <a href="{% url 'orders:mis_pedidos' %}"
+               class="inline-flex items-center gap-2 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 text-gray-900 font-medium py-3 px-5">
+              Ver mis pedidos
+            </a>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Bloque datos de contacto & envío (si existen) -->
+      {% if order.shipping_data %}
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <h2 class="text-lg font-bold text-gray-900">Contacto & Envío</h2>
+        {% with s=order.shipping_data %}
+        <dl class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+          <div><dt class="text-gray-500">Nombre</dt><dd class="font-medium text-gray-900">{{ s.first_name }} {{ s.last_name }}</dd></div>
+          <div><dt class="text-gray-500">Email</dt><dd class="font-medium text-gray-900 break-all">{{ s.email }}</dd></div>
+          <div><dt class="text-gray-500">Teléfono</dt><dd class="font-medium text-gray-900">{{ s.phone }}</dd></div>
+          <div><dt class="text-gray-500">RUT</dt><dd class="font-medium text-gray-900">{{ s.rut|default:"—" }}</dd></div>
+          <div class="md:col-span-2">
+            <dt class="text-gray-500">Dirección</dt>
+            <dd class="font-medium text-gray-900">
+              {{ s.address }}{% if s.address2 %}, {{ s.address2 }}{% endif %}
+              <span class="text-gray-600"> · Comuna: </span>{{ s.comuna }}
+              <span class="text-gray-600"> · Región: </span>{{ s.region }}
+            </dd>
+          </div>
+          <div><dt class="text-gray-500">Entrega</dt><dd class="font-medium text-gray-900">{% if s.shipping_method == 'home' %}Envío a domicilio{% else %}Retiro en taller{% endif %}</dd></div>
+          <div class="md:col-span-2"><dt class="text-gray-500">Notas</dt><dd class="font-medium text-gray-900">{{ s.notes|default:"—" }}</dd></div>
+        </dl>
+        {% endwith %}
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- Resumen de pedido -->
+    <aside class="lg:col-span-1">
+      <div class="sticky top-24">
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+          <h2 class="text-lg font-bold text-gray-900 mb-4">Resumen del pedido</h2>
+
+          {% with items=order.items.all %}
+            {% if items|length == 0 %}
+              {% with items=order.orderitem_set.all %}
+                {% for item in items %}
+                  <div class="py-3 flex items-center justify-between border-b last:border-0">
+                    <div>
+                      <p class="font-medium text-gray-900 text-sm leading-tight">{{ item.product_name }}</p>
+                      <p class="text-xs text-gray-500">Cantidad: {{ item.quantity }}</p>
+                    </div>
+                    <div class="text-sm font-semibold text-gray-800">{{ item.subtotal|clp_format }}</div>
+                  </div>
+                {% endfor %}
+              {% endwith %}
+            {% else %}
+              {% for item in items %}
+                <div class="py-3 flex items-center justify-between border-b last:border-0">
+                  <div>
+                    <p class="font-medium text-gray-900 text-sm leading-tight">{{ item.product_name }}</p>
+                    <p class="text-xs text-gray-500">Cantidad: {{ item.quantity }}</p>
+                  </div>
+                  <div class="text-sm font-semibold text-gray-800">{{ item.subtotal|clp_format }}</div>
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+
+          <dl class="mt-4 space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <dt class="text-gray-600">Subtotal</dt>
+              <dd class="font-medium text-gray-800">
+                {% with sum=0 %}
+                  {% for it in order.items.all %}{% widthratio it.subtotal 1 1 as subtotal_int %}{% endfor %}
+                {% endwith %}
+                <!-- Simplemente mostramos total sin envío usando order.total si no tienes desgloses -->
+                {{ order.total|clp_format }}
+              </dd>
+            </div>
+            {% if order.shipping_data.shipping_cost %}
+            <div class="flex items-center justify-between">
+              <dt class="text-gray-600">Envío</dt>
+              <dd class="font-medium text-gray-800">{{ order.shipping_data.shipping_cost|clp_format }}</dd>
+            </div>
+            {% endif %}
+            <div class="flex items-center justify-between border-t pt-3">
+              <dt class="text-gray-900 font-semibold">Total</dt>
+              <dd class="text-xl font-extrabold text-[#5e0013]">{{ order.total|clp_format }}</dd>
+            </div>
+          </dl>
+
+          {% if estado == 'failed' %}
+            <p class="mt-4 text-xs text-gray-500">
+              Si el cargo apareció en tu banco pero la compra no figura como pagada, escríbenos para ayudarte.
+            </p>
+          {% endif %}
+        </section>
+
+        <div class="mt-4 text-xs text-gray-500 text-center">
+          ¿Ayuda? Contáctanos por WhatsApp.
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{
+  "05": [
+    {"codigo": "05101", "nombre": "Valparaíso"},
+    {"codigo": "05107", "nombre": "Viña del Mar"},
+    {"codigo": "05109", "nombre": "Quilpué"},
+    {"codigo": "05110", "nombre": "Villa Alemana"},
+    {"codigo": "05111", "nombre": "Concón"}
+  ],
+  "13": [
+    {"codigo": "13101", "nombre": "Santiago"},
+    {"codigo": "13114", "nombre": "Las Condes"},
+    {"codigo": "13123", "nombre": "Ñuñoa"},
+    {"codigo": "13132", "nombre": "Puente Alto"},
+    {"codigo": "13119", "nombre": "Maipú"}
+  ]
+}

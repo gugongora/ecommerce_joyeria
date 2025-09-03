@@ -4,5 +4,6 @@ from . import views
 app_name = 'payments'
 
 urlpatterns = [
-    path('confirmacion/', views.webpay_confirmacion, name='webpay_confirmacion'),
+    path("webpay/init/", views.webpay_init, name="webpay_init"),
+    path("webpay/confirmacion/", views.webpay_confirmacion, name="webpay_confirmacion"),
 ]

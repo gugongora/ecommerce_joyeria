@@ -1,0 +1,5 @@
+{% load humanize %}
+[ADMIN] Pago fallido para pedido #{{ order.id }}
+
+Usuario: {{ order.user.get_full_name }} ({{ order.user.email }})
+Mensaje: {{ mensaje }}

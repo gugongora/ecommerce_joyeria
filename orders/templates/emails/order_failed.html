@@ -1,0 +1,13 @@
+{% load humanize %}
+<!doctype html>
+<html>
+  <body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;">
+    <h2>Tu pago no se completó</h2>
+    <p>Pedido <strong>#{{ order.id }}</strong></p>
+    <p><strong>Detalle:</strong> {{ mensaje }}</p>
+    {% if detalle %}
+      <pre style="background:#f7f7f7;padding:12px;border-radius:8px">{{ detalle|safe }}</pre>
+    {% endif %}
+    <p>Puedes intentar nuevamente desde el sitio o escribirnos si necesitas ayuda.</p>
+  </body>
+</html>

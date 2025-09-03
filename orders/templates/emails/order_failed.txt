@@ -1,0 +1,7 @@
+{% load humanize %}
+Tu pago no se completó
+
+Pedido #{{ order.id }}
+Detalle: {{ mensaje }}
+
+Si necesitas ayuda, respóndenos este correo.

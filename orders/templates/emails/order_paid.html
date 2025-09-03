@@ -1,0 +1,29 @@
+{% load humanize %}
+<!doctype html>
+<html>
+  <body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;">
+    <h2>¡Gracias por tu compra, {{ order.user.first_name|default:"" }}!</h2>
+    <p>Hemos recibido tu pago del pedido <strong>#{{ order.id }}</strong>.</p>
+
+    <h3>Resumen</h3>
+    <ul>
+      {% for it in order.items.all %}
+        <li>
+          {{ it.product_name }} × {{ it.quantity }} — ${{ it.subtotal|intcomma }}
+        </li>
+      {% endfor %}
+    </ul>
+    <p><strong>Total pagado:</strong> ${{ order.total|intcomma }}</p>
+
+    {% if order.shipping_data %}
+      <h3>Envío</h3>
+      <p>
+        {{ order.shipping_data.address }}{% if order.shipping_data.address2 %}, {{ order.shipping_data.address2 }}{% endif %}<br>
+        Comuna: {{ order.shipping_data.comuna }} — Región: {{ order.shipping_data.region }}<br>
+        Método: {% if order.shipping_data.shipping_method == 'home' %}Envío a domicilio{% else %}Retiro en taller{% endif %}
+      </p>
+    {% endif %}
+
+    <p>Te avisaremos cuando tu pedido esté en camino. ¡Gracias por preferirnos!</p>
+  </body>
+</html>

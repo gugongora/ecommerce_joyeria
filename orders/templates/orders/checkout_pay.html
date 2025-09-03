@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+  <!-- STEPS -->
+  <div class="mb-6">
+    <ol class="grid grid-cols-3 gap-2 text-xs md:text-sm">
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700">1</span>
+        Carrito
+      </li>
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-gray-100 text-gray-600 border border-gray-200">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-gray-300 text-gray-700">2</span>
+        Datos & Envío
+      </li>
+      <li class="flex items-center gap-2 p-3 rounded-lg bg-[#F5E6CA] text-[#5e0013] font-semibold border border-[#e8d6b5]">
+        <span class="w-6 h-6 rounded-full flex items-center justify-center bg-[#5e0013] text-white">3</span>
+        Pago
+      </li>
+    </ol>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- IZQUIERDA: MÉTODO DE PAGO + CONFIRMACIÓN -->
+    <section class="lg:col-span-2 space-y-6">
+      <!-- Resumen contacto & envío -->
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-bold text-gray-900">Datos de contacto & envío</h2>
+          <a href="{% url 'orders:checkout_shipping' %}" class="text-sm text-[#BD6A5C] hover:text-[#83041e] font-medium">Editar</a>
+        </div>
+
+        {% with s=shipping %}
+        <dl class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-sm">
+          <div>
+            <dt class="text-gray-500">Nombre</dt>
+            <dd class="font-medium text-gray-900">{{ s.first_name }} {{ s.last_name }}</dd>
+          </div>
+          <div>
+            <dt class="text-gray-500">Email</dt>
+            <dd class="font-medium text-gray-900 break-all">{{ s.email }}</dd>
+          </div>
+          <div>
+            <dt class="text-gray-500">Teléfono</dt>
+            <dd class="font-medium text-gray-900">{{ s.phone }}</dd>
+          </div>
+          <div>
+            <dt class="text-gray-500">RUT</dt>
+            <dd class="font-medium text-gray-900">{{ s.rut|default:"—" }}</dd>
+          </div>
+          <div class="md:col-span-2">
+            <dt class="text-gray-500">Dirección</dt>
+            <dd class="font-medium text-gray-900">
+              {{ s.address }}{% if s.address2 %}, {{ s.address2 }}{% endif %}
+              <span class="text-gray-600"> · Comuna: </span>{{ s.comuna }}
+              <span class="text-gray-600"> · Región: </span>{{ s.region }}
+            </dd>
+          </div>
+          <div class="md:col-span-2">
+            <dt class="text-gray-500">Notas</dt>
+            <dd class="font-medium text-gray-900">{{ s.notes|default:"—" }}</dd>
+          </div>
+          <div>
+            <dt class="text-gray-500">Entrega</dt>
+            <dd class="font-medium text-gray-900">
+              {% if s.shipping_method == 'home' %}Envío a domicilio{% else %}Retiro en taller{% endif %}
+            </dd>
+          </div>
+        </dl>
+        {% endwith %}
+      </div>
+
+<!-- Método de pago -->
+<div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+  <h2 class="text-lg font-bold text-gray-900 mb-4">Método de pago</h2>
+
+  <!-- ⬇️ CAMBIA la acción a payments:webpay_init -->
+  <form method="post" action="{% url 'payments:webpay_init' %}" id="pay-form" class="space-y-4">
+    {% csrf_token %}
+    <input type="hidden" name="shipping_cost" id="shipping_cost_input" value="">
+    <input type="hidden" name="grand_total" id="grand_total_input" value="">
+    <input type="hidden" name="pay_method" value="webpay">
+
+    <label class="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-gray-50">
+      <input type="radio" name="payment_method" value="webpay" class="text-[#5e0013]" checked>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center justify-center px-2 py-1 rounded bg-[#F5E6CA] text-[#5e0013] text-xs font-semibold">Webpay</span>
+        <img src="{% static 'images/webpay-logo.png' %}" alt="Webpay" class="h-5 hidden md:block" onerror="this.style.display='none'">
+      </div>
+    </label>
+
+    <p class="text-xs text-gray-500">Serás redirigido a Webpay para completar el pago de forma segura.</p>
+
+    <div class="flex items-center justify-between pt-2">
+      <a href="{% url 'orders:checkout_shipping' %}" class="text-[#BD6A5C] hover:text-[#83041e] font-medium">← Volver a datos & envío</a>
+      <button type="submit" class="inline-flex items-center gap-2 rounded-lg bg-[#5e0013] hover:bg-[#83041e] text-white font-semibold py-3 px-5">
+        Pagar con Webpay
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </form>
+</div>
+    </section>
+
+    <!-- DERECHA: RESUMEN PEDIDO -->
+    <aside class="lg:col-span-1">
+      <div class="sticky top-24">
+        <section class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+          <h2 class="text-lg font-bold text-gray-900 mb-4">Resumen del pedido</h2>
+
+          <!-- Items -->
+          <ul class="divide-y divide-gray-200 mb-4">
+            {% for item in cart_items %}
+            <li class="py-3 flex items-center gap-4">
+              {% if item.product.imagen %}
+                <img src="{{ item.product.imagen }}" alt="{{ item.product.nombre }}" class="w-16 h-16 object-cover rounded-md border">
+              {% else %}
+                <img src="{% static 'images/no-image.jpg' %}" alt="{{ item.product.nombre }}" class="w-16 h-16 object-cover rounded-md border">
+              {% endif %}
+              <div class="flex-1">
+                <p class="font-medium text-gray-900 text-sm leading-tight">{{ item.product.nombre }}</p>
+                <p class="text-xs text-gray-500">Cantidad: {{ item.quantity }}</p>
+              </div>
+              <div class="text-sm font-semibold text-gray-800">
+                {{ item.subtotal|clp_format }}
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+
+          <!-- Totales -->
+          <dl class="space-y-2 text-sm">
+            <div class="flex items-center justify-between">
+              <dt class="text-gray-600">Subtotal</dt>
+              <dd class="font-medium text-gray-800">{{ total|clp_format }}</dd>
+            </div>
+            <div class="flex items-center justify-between">
+              <dt class="text-gray-600">Envío</dt>
+              <dd id="shippingAmount" class="text-gray-800">Por calcular</dd>
+            </div>
+            <div class="flex items-center justify-between border-t pt-3">
+              <dt class="text-gray-900 font-semibold">Total</dt>
+              <dd id="grandTotal" class="text-xl font-extrabold text-[#5e0013]">{{ total|clp_format }}</dd>
+            </div>
+          </dl>
+
+          <p class="mt-4 text-xs text-gray-500">
+            Al continuar aceptas nuestros términos y condiciones.
+          </p>
+        </section>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- Datos necesarios para recomputar envío -->
+<script id="cart-total-json" type="application/json">{{ total|floatformat:0 }}</script>
+{{ shipping|json_script:"shipping-json" }}
+
+<script>
+(function(){
+  const baseTotal = Number(document.getElementById('cart-total-json').textContent) || 0;
+  let sData = {};
+  try { sData = JSON.parse(document.getElementById('shipping-json').textContent || "{}"); } catch(e){ sData = {}; }
+
+  function formatCLP(n){
+    try { return n.toLocaleString('es-CL', { style:'currency', currency:'CLP', maximumFractionDigits:0 }); }
+    catch(e){ return '$' + Math.round(n); }
+  }
+
+  function computeShipping(method, region){
+    if(method === 'home'){
+      return (region === '05') ? 3990 : 5990;  // 05 = Valparaíso
+    }
+    return 0;
+  }
+
+  const shippingEl = document.getElementById('shippingAmount');
+  const grandEl = document.getElementById('grandTotal');
+  const ship = computeShipping(sData.shipping_method || 'pickup', sData.region || '05');
+
+  // Pintamos montos
+  shippingEl.textContent = ship > 0 ? formatCLP(ship) : 'Gratis';
+  grandEl.textContent = formatCLP(baseTotal + ship);
+
+  // Enviamos al backend como hidden inputs
+  const shipInput = document.getElementById('shipping_cost_input');
+  const grandInput = document.getElementById('grand_total_input');
+  if (shipInput) shipInput.value = ship;
+  if (grandInput) grandInput.value = Math.round(baseTotal + ship);
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,14 @@
+/* Animación para los flash-messages */
+@keyframes fade-in-out {
+  0% { opacity: 0; transform: translateY(-6px); }
+  10% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+.animate-fade-in-out {
+  animation: fade-in-out 4.2s ease-in-out both;
+}
+
+/* Pequeños helpers opcionales */
+.visible { visibility: visible; }  /* en caso de que quieras forzar visibilidad */
+.invisible { visibility: hidden; }

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Guía de Tallas de Anillos{% endblock %}
+{% block main_classes %}pt-[128px] flex-grow max-w-5xl mx-auto px-4 md:px-6 lg:px-8 py-8{% endblock %}
+
+{% block content %}
+
+<header class="mb-6">
+  <h1 class="text-2xl md:text-3xl font-semibold text-gray-900">Guía de Tallas de Anillos</h1>
+  <p class="text-sm text-gray-600 mt-1">Encuentra tu talla midiendo un anillo que ya uses o el contorno de tu dedo.</p>
+</header>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Método 1 -->
+  <section class="rounded-xl border border-gray-200 bg-white p-5 lg:col-span-2">
+    <h2 class="text-lg font-semibold text-gray-900">Método 1: Mide un anillo que ya te calce</h2>
+    <ol class="mt-3 list-decimal list-inside text-gray-700 space-y-1">
+      <li>Coloca el anillo sobre una regla y mide el <strong>diámetro interno</strong> (en milímetros).</li>
+      <li>Ingresa el valor abajo para obtener la talla referencial.</li>
+    </ol>
+
+    <!-- Calculadora -->
+    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="rounded-lg border border-gray-200 p-4">
+        <label for="diametro" class="block text-sm font-medium text-gray-700">Diámetro interno (mm)</label>
+        <input id="diametro" type="number" step="0.01" min="10" max="30"
+               class="mt-1 w-full rounded-lg border-gray-300 focus:ring-[#5e0013] focus:border-[#5e0013]"
+               placeholder="Ej: 17.3">
+        <button id="btnPorDiametro"
+                class="mt-3 w-full rounded-lg bg-[#5e0013] text-white px-4 py-2 hover:bg-[#7a0011] transition">
+          Calcular talla
+        </button>
+      </div>
+
+      <div class="rounded-lg border border-gray-200 p-4">
+        <label for="circunferencia" class="block text-sm font-medium text-gray-700">Circunferencia (mm)</label>
+        <input id="circunferencia" type="number" step="0.1" min="40" max="100"
+               class="mt-1 w-full rounded-lg border-gray-300 focus:ring-[#5e0013] focus:border-[#5e0013]"
+               placeholder="Ej: 54.4">
+        <p class="text-xs text-gray-600 mt-1">Tip: circunferencia ≈ diámetro × π (3.1416)</p>
+        <button id="btnPorCircunferencia"
+                class="mt-3 w-full rounded-lg bg-gray-900 text-white px-4 py-2 hover:bg-black transition">
+          Calcular talla
+        </button>
+      </div>
+    </div>
+
+    <div id="resultado" class="mt-4 hidden rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-emerald-800">
+      <p class="font-semibold">Resultado:</p>
+      <p class="mt-1 text-sm">
+        Talla (US): <span id="outTalla" class="font-semibold"></span>
+        <span class="mx-2 text-emerald-700/70">·</span>
+        Diámetro aprox: <span id="outDiam" class="font-medium"></span> mm
+        <span class="mx-2 text-emerald-700/70">·</span>
+        Circunferencia aprox: <span id="outCirc" class="font-medium"></span> mm
+      </p>
+      <p class="mt-2 text-xs">* Referencial. La talla real puede variar según el ancho del aro, el clima y el ajuste deseado.</p>
+    </div>
+  </section>
+
+  <!-- Método 2 -->
+  <aside class="rounded-xl border border-gray-200 bg-white p-5">
+    <h2 class="text-lg font-semibold text-gray-900">Método 2: Mide tu dedo</h2>
+    <ol class="mt-3 list-decimal list-inside text-gray-700 space-y-1">
+      <li>Recorta una tira de papel, rodea el dedo y marca el punto de unión.</li>
+      <li>Mide la <strong>circunferencia</strong> (en mm) y úsala en la calculadora.</li>
+      <li>Mide al final del día y con la mano templada.</li>
+    </ol>
+    <div class="mt-4 rounded-lg border border-gray-100 bg-gray-50 p-3 text-xs text-gray-700">
+      <p class="font-medium">Consejos:</p>
+      <ul class="mt-1 list-disc list-inside space-y-1">
+        <li>Si dudas entre dos tallas, elige la mayor.</li>
+        <li>Los aros <em>más anchos</em> tienden a necesitar ½ talla extra.</li>
+        <li>Evita medir con frío o calor extremo.</li>
+      </ul>
+    </div>
+  </aside>
+</div>
+
+<!-- Tabla de referencia US <-> mm -->
+<section class="mt-8 rounded-xl border border-gray-200 bg-white p-5">
+  <h2 class="text-lg font-semibold text-gray-900">Tabla de referencia (Talla US)</h2>
+  <p class="mt-1 text-sm text-gray-600">Equivalencias aproximadas de <strong>diámetro interno</strong> y <strong>circunferencia</strong>.</p>
+
+  <div class="overflow-x-auto mt-4">
+    <table class="min-w-full divide-y divide-gray-200 text-sm">
+      <thead class="bg-gray-50">
+        <tr>
+          <th class="px-3 py-2 text-left font-semibold text-gray-700">Talla US</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-700">Diámetro (mm)</th>
+          <th class="px-3 py-2 text-left font-semibold text-gray-700">Circunferencia (mm)</th>
+        </tr>
+      </thead>
+      <tbody id="tablaTallas" class="divide-y divide-gray-100"></tbody>
+    </table>
+  </div>
+
+  <p class="mt-3 text-xs text-gray-500">* Las equivalencias pueden variar levemente según norma/fabricante.</p>
+</section>
+
+<!-- FAQs -->
+<section class="mt-8">
+  <h2 class="text-lg font-semibold text-gray-900 mb-2">Preguntas frecuentes</h2>
+  <div class="space-y-3">
+    <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white open:shadow-sm">
+      <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+        <h3 class="text-base font-medium text-gray-900">¿Usan tallaje US, EU o medidas locales?</h3>
+        <svg class="w-5 h-5 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-4 pb-4 text-gray-700 text-sm">
+        Mostramos referencia en <strong>talla US</strong> por ser la más extendida. Si necesitas otra norma, te ayudamos a convertirla.
+      </div>
+    </details>
+
+    <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+      <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+        <h3 class="text-base font-medium text-gray-900">¿Qué pasa si la talla no es perfecta?</h3>
+        <svg class="w-5 h-5 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-4 pb-4 text-gray-700 text-sm">
+        Ofrecemos <strong>ajustes de talla</strong> en nuestro taller. Contáctanos con tu número de pedido para coordinar.
+      </div>
+    </details>
+
+    <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+      <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+        <h3 class="text-base font-medium text-gray-900">¿La talla cambia con el ancho del aro?</h3>
+        <svg class="w-5 h-5 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+      </summary>
+      <div class="px-4 pb-4 text-gray-700 text-sm">
+        Sí. En aros anchos muchas personas prefieren subir <strong>½ talla</strong> para mayor comodidad.
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- JS: tabla + calculadora -->
+<script>
+  // Referencia (US size -> diámetro mm). Valores aproximados estándar
+  const SIZE_MAP = [
+    {us: 3.0, d: 14.1}, {us: 3.5, d: 14.5}, {us: 4.0, d: 14.9}, {us: 4.5, d: 15.3},
+    {us: 5.0, d: 15.7}, {us: 5.5, d: 16.1}, {us: 6.0, d: 16.5}, {us: 6.5, d: 16.9},
+    {us: 7.0, d: 17.3}, {us: 7.5, d: 17.7}, {us: 8.0, d: 18.1}, {us: 8.5, d: 18.5},
+    {us: 9.0, d: 18.9}, {us: 9.5, d: 19.4}, {us: 10.0, d: 19.8}, {us: 10.5, d: 20.2},
+    {us: 11.0, d: 20.6}, {us: 11.5, d: 21.0}, {us: 12.0, d: 21.4}, {us: 12.5, d: 21.8},
+    {us: 13.0, d: 22.2}
+  ];
+  const PI = 3.1416;
+
+  function buildTable(){
+    const tbody = document.getElementById('tablaTallas');
+    if (!tbody) return;
+    tbody.innerHTML = SIZE_MAP.map(s => {
+      const circ = (s.d * PI).toFixed(1);
+      return `<tr>
+        <td class="px-3 py-2 text-gray-900 font-medium">${s.us}</td>
+        <td class="px-3 py-2 text-gray-700">${s.d.toFixed(1)}</td>
+        <td class="px-3 py-2 text-gray-700">${circ}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function nearestSizeByDiameter(dmm){
+    if (!dmm) return null;
+    let best = null, bestDiff = Infinity;
+    for (const s of SIZE_MAP){
+      const diff = Math.abs(s.d - dmm);
+      if (diff < bestDiff) { best = s; bestDiff = diff; }
+    }
+    return best;
+  }
+
+  function showResult(us, d, c){
+    const box = document.getElementById('resultado');
+    document.getElementById('outTalla').textContent = us ? us : '-';
+    document.getElementById('outDiam').textContent = d ? d.toFixed(2) : '-';
+    document.getElementById('outCirc').textContent = c ? c.toFixed(1) : '-';
+    box.classList.remove('hidden');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    buildTable();
+
+    document.getElementById('btnPorDiametro')?.addEventListener('click', () => {
+      const d = parseFloat(document.getElementById('diametro').value);
+      if (!d || d < 10 || d > 30) { alert('Ingresa un diámetro válido (10–30 mm).'); return; }
+      const s = nearestSizeByDiameter(d);
+      showResult(s?.us ?? null, d, d * PI);
+    });
+
+    document.getElementById('btnPorCircunferencia')?.addEventListener('click', () => {
+      const c = parseFloat(document.getElementById('circunferencia').value);
+      if (!c || c < 40 || c > 100) { alert('Ingresa una circunferencia válida (40–100 mm).'); return; }
+      const d = c / PI;
+      const s = nearestSizeByDiameter(d);
+      showResult(s?.us ?? null, d, c);
+    });
+  });
+</script>
+
+{% endblock %}

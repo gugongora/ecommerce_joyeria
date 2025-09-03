@@ -6,56 +6,91 @@
 {% block content %}
 <div class="max-w-6xl mx-auto px-4 py-10">
 
+  {# Breadcrumb simple (opcional) #}
+  <nav class="mb-4 text-sm text-gray-500">
+    <a href="{% url 'store:product_list' %}" class="hover:underline">Home</a>
+    <span class="mx-2">/</span>
+    <a href="{% url 'store:catalogo_productos' %}" class="hover:underline">Catálogo</a>
+    {% if product.categoria_nombre %}
+      <span class="mx-2">/</span>
+      <span>{{ product.categoria_nombre }}</span>
+    {% endif %}
+  </nav>
+
   <!-- Bloque principal: imagen e info -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center bg-white border border-gray-200 rounded-lg shadow p-6">
-    
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start bg-white border border-gray-200 rounded-xl shadow p-6">
+
     <!-- Imagen del producto -->
-<div class="relative w-full pt-[100%] overflow-hidden rounded-lg shadow-md">
-  <img src="{{ product.imagen_url|default:'/static/images/no-image.jpg' }}" 
-       alt="{{ product.nombre }}" 
-       class="absolute top-0 left-0 w-full h-full object-cover">
-</div>  
+    <div>
+      <div class="relative w-full pt-[100%] overflow-hidden rounded-lg ring-1 ring-black/5">
+        <img src="{{ product.imagen_url|default:'/static/images/no-image.jpg' }}"
+             alt="{{ product.nombre }}"
+             class="absolute inset-0 w-full h-full object-cover">
+      </div>
+      <!-- Confianzas -->
+      <div class="mt-4 grid grid-cols-2 gap-3 text-xs text-gray-700">
+        <div class="flex items-center gap-2 rounded-lg border border-gray-200 p-2">
+          <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm-1 14-4-4 1.414-1.414L11 12.172l5.586-5.586L18 8l-7 8Z"/></svg>
+          <span>Pago seguro Webpay</span>
+        </div>
+        <div class="flex items-center gap-2 rounded-lg border border-gray-200 p-2">
+          <svg class="w-4 h-4 text-[#5e0013]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 2 7l10 5 10-5-10-5Zm0 7-10-5v13l10 5 10-5V4l-10 5Z"/></svg>
+          <span>Garantía y Ajustes</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Información del producto -->
     <div>
-      <h1 class="text-3xl font-bold text-[#5e0013] mb-4">{{ product.nombre }}</h1>
-      <p class="text-gray-600 text-lg mb-1"><strong>Código:</strong> {{ product.codigo }}</p>
-      <p class="text-gray-600 text-lg mb-1"><strong>Marca:</strong> {{ product.marca_nombre }}</p>
-      <p class="text-gray-600 text-lg mb-4"><strong>Categoría:</strong> {{ product.categoria_nombre }}</p>
+      <h1 class="text-3xl font-bold text-[#5e0013] mb-2">{{ product.nombre }}</h1>
+      <div class="flex flex-wrap gap-3 text-sm text-gray-600 mb-4">
+        <span><strong>Código:</strong> {{ product.codigo }}</span>
+        {% if product.marca_nombre %}<span class="hidden md:inline">•</span><span><strong>Marca:</strong> {{ product.marca_nombre }}</span>{% endif %}
+        {% if product.categoria_nombre %}<span class="hidden md:inline">•</span><span><strong>Categoría:</strong> {{ product.categoria_nombre }}</span>{% endif %}
+      </div>
 
       {% if product.descripcion %}
-        <p class="text-gray-700 mb-6 leading-relaxed">{{ product.descripcion }}</p>
+        <p class="text-gray-700 mb-5 leading-relaxed">{{ product.descripcion }}</p>
       {% endif %}
 
       {% if product.precios %}
-        <p class="text-2xl text-[#BD6A5C] font-semibold mb-6">
-          {{ product.precios.0.valor|clp_format }}
-
-        </p>
+        <div class="mb-6">
+          <p class="text-2xl text-[#000000] font-semibold">
+            {{ product.precios.0.valor|clp_format }}
+          </p>
+          {# si más adelante agregas precio anterior, aquí va el tachado #}
+        </div>
       {% else %}
         <p class="text-red-600 mb-6">Sin precio disponible</p>
       {% endif %}
 
-      <div class="flex flex-col sm:flex-row gap-4">
-        <form action="{% url 'cart:add_to_cart' product.id|default_if_none:0 %}" method="post">
+      <div class="flex flex-col sm:flex-row gap-3">
+        <form action="{% url 'cart:add_to_cart' product.id|default_if_none:0 %}" method="post" class="flex-1">
           {% csrf_token %}
-          <button type="submit" class="w-full bg-[#5e0013] hover:bg-[#83041e] text-white font-medium py-2 px-6 rounded transition">
+          <button type="submit" class="w-full bg-[#5e0013] hover:bg-[#83041e] text-white font-medium py-2.5 px-6 rounded-lg transition">
             Agregar al carrito
           </button>
         </form>
-        <a href="{% url 'store:catalogo_productos' %}" class="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-6 rounded border border-gray-300 transition">
+        <a href="{% url 'store:catalogo_productos' %}" class="w-full sm:w-auto text-center bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2.5 px-6 rounded-lg border border-gray-300 transition">
           Volver al catálogo
         </a>
+      </div>
+
+      <!-- Mini info despacho/tienda -->
+      <div class="mt-4 text-sm text-gray-600 space-y-1">
+        <p>Envíos a todo Chile. Despacho 2–5 días hábiles (Región de Valparaíso 1–3 días).</p>
+        <p>Retiro en tienda: Av. Valparaíso 275, Local 2, Viña del Mar.</p>
       </div>
     </div>
   </div>
 
-  <!-- Productos recomendados -->
+    <!-- Productos recomendados -->
   {% if productos_recomendados %}
-    <div class="mt-16">
+    <div class="mt-14">
       <h2 class="text-2xl font-semibold mb-6 text-center text-[#5e0013]">También te puede interesar</h2>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {% for p in productos_recomendados %}
-          <div class="bg-white border border-gray-200 rounded-lg shadow hover:shadow-lg transition overflow-hidden">
+          <div class="bg-white border border-gray-200 rounded-xl shadow hover:shadow-lg transition overflow-hidden">
             <a href="{% url 'store:product_detail' p.id %}">
               <img src="{{ p.imagen_url|default:'/static/images/no-image.jpg' }}" alt="{{ p.nombre }}" class="w-full h-56 object-cover">
               <div class="p-4">
@@ -74,4 +109,130 @@
     </div>
   {% endif %}
 </div>
+
+  <!-- FAQs -->
+  <section class="mt-12">
+    <h2 class="text-2xl font-semibold text-gray-900 mb-4">Preguntas frecuentes</h2>
+
+    <div class="space-y-3">
+      <!-- Envíos -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white open:shadow-sm">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Cuáles son los plazos y costos de envío?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Realizamos envíos a todo Chile mediante couriers confiables. Los plazos habituales son
+          <strong>2–5 días hábiles</strong> según región; Región de Valparaíso <strong>1–3 días</strong>.
+          El costo se calcula al finalizar la compra según destino y peso. Te enviaremos el <strong>número de seguimiento</strong> por correo.
+        </div>
+      </details>
+
+      <!-- Cambios y devoluciones -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Puedo cambiar o devolver mi joya?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Aceptamos <strong>cambios</strong> dentro de los <strong>10 días</strong> desde la recepción, en su empaque y sin uso.
+          Las <strong>devoluciones</strong> se evalúan caso a caso. Quedan excluidos los <strong>productos personalizados</strong> o con <em>ajustes a medida</em>, salvo defecto de fabricación.
+          Escríbenos con tu <strong>N° de pedido</strong> para coordinar.
+        </div>
+      </details>
+
+      <!-- Garantía -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Qué garantía tienen las piezas?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Todas nuestras joyas cuentan con <strong>garantía por defectos de fabricación</strong>.
+          Además, ofrecemos <strong>ajustes y mantenciones</strong> en nuestro taller. Los daños por uso,
+          golpes o agentes químicos no están cubiertos, pero podemos ayudarte con <em>reparaciones</em>.
+        </div>
+      </details>
+
+      <!-- Pagos -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Qué medios de pago aceptan?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Aceptamos <strong>Webpay</strong> (Tarjetas de crédito y débito) y <strong>Transferencia bancaria</strong>.
+          Los pagos son procesados de forma <strong>segura</strong>; recibirás comprobante por correo.
+        </div>
+      </details>
+
+      <!-- Tallas y ajustes -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Hacen ajustes de talla o personalización?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Sí. Podemos <strong>ajustar tallas</strong> y realizar <strong>grabados o diseños personalizados</strong>.
+          Escríbenos y te orientamos con <strong>plazos y costos</strong>. En piezas a medida aplican tiempos extra de fabricación.
+        </div>
+      </details>
+
+      <!-- Tiempos de fabricación -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Cuál es el tiempo de fabricación para piezas especiales?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Depende del diseño y materiales. Como referencia, entre <strong>7 y 20 días hábiles</strong>.
+          Te iremos informando cada etapa del proceso.
+        </div>
+      </details>
+
+      <!-- Retiro en tienda -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Puedo retirar en tienda?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Sí, selecciona <strong>Retiro en tienda</strong> al finalizar tu compra. Te avisaremos cuando esté listo
+          para retirar en <strong>Av. Valparaíso 275, Local 2, Viña del Mar</strong>.
+        </div>
+      </details>
+
+      <!-- Cuidados y soporte -->
+      <details class="group [&_summary::-webkit-details-marker]:hidden rounded-lg border border-gray-200 bg-white">
+        <summary class="flex items-center justify-between gap-2 p-4 cursor-pointer">
+          <h3 class="text-base md:text-lg font-medium text-gray-900">¿Cómo cuido mi joya y dónde pido soporte?</h3>
+          <svg class="w-5 h-5 shrink-0 transition-transform duration-300 group-open:-rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </summary>
+        <div class="px-4 pb-4 text-gray-700 text-sm md:text-base">
+          Evita perfumes, cloro y golpes. Guarda tus joyas en estuche individual. Para
+          <strong>limpieza y mantención</strong> profesional o dudas de tu compra, contáctanos por
+          WhatsApp o correo con tu número de pedido.
+        </div>
+      </details>
+    </div>
+  </section>
+
+
+{# SEO: JSON-LD de FAQPage #}
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"¿Cuáles son los plazos y costos de envío?","acceptedAnswer":{"@type":"Answer","text":"Envíos a todo Chile. Plazos 2–5 días hábiles según región (Valparaíso 1–3). Costo según destino y peso. Incluye número de seguimiento."}},
+    {"@type":"Question","name":"¿Puedo cambiar o devolver mi joya?","acceptedAnswer":{"@type":"Answer","text":"Cambios dentro de 10 días desde la recepción, sin uso. Devoluciones se evalúan caso a caso. Personalizados y ajustes a medida excluidos salvo defecto."}},
+    {"@type":"Question","name":"¿Qué garantía tienen las piezas?","acceptedAnswer":{"@type":"Answer","text":"Garantía por defectos de fabricación. Ofrecemos ajustes y mantenciones en taller; daños por uso o químicos no están cubiertos."}},
+    {"@type":"Question","name":"¿Qué medios de pago aceptan?","acceptedAnswer":{"@type":"Answer","text":"Webpay (crédito/débito) y Transferencia bancaria. Pagos seguros y comprobante por correo."}},
+    {"@type":"Question","name":"¿Hacen ajustes de talla o personalización?","acceptedAnswer":{"@type":"Answer","text":"Sí, realizamos ajustes de talla, grabados y diseños a medida. Plazos y costos según requerimiento."}},
+    {"@type":"Question","name":"¿Cuál es el tiempo de fabricación para piezas especiales?","acceptedAnswer":{"@type":"Answer","text":"Entre 7 y 20 días hábiles en promedio, según diseño y materiales."}},
+    {"@type":"Question","name":"¿Puedo retirar en tienda?","acceptedAnswer":{"@type":"Answer","text":"Sí. Selecciona Retiro en tienda al finalizar la compra. Avisamos cuando esté listo en Av. Valparaíso 275, Local 2, Viña del Mar."}},
+    {"@type":"Question","name":"¿Cómo cuido mi joya y dónde pido soporte?","acceptedAnswer":{"@type":"Answer","text":"Evita perfumes, cloro y golpes. Guarda en estuche individual. Para limpieza, mantención o dudas, contáctanos por WhatsApp o correo con tu N° de pedido."}}
+  ]
+}
+</script>
 {% endblock %}
