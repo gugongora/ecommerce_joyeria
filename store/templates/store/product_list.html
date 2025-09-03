@@ -1,14 +1,13 @@
 {% extends 'base.html' %}
-{% block main_classes %}pt-[20px] flex-grow w-full p-0 m-0 pb-2{% endblock %}
+{% block title %}Catálogo | Góngora Joyas{% endblock %}
+{% block main_classes %}pt-[5px] md:pt-[30px] flex-grow w-full{% endblock %}
 {% load static %}
 {% get_static_prefix as STATIC %}
 {% load user_groups %}
 
 {% block hero %}
-
-<!-- Hero Carousel -->
-<div class="relative overflow-hidden mb-6 shadow-lg w-full h-[62vh] md:h-[72vh] lg:h-[80vh] rounded-none md:rounded-xl">
-  <!-- Vignette / gradiente para legibilidad -->
+<!-- Hero -->
+<div class="relative overflow-hidden mb-6 shadow-lg w-full h-[60vh] sm:h-[60vh] md:h-[80vh] lg:h-[115vh] rounded-none md:rounded-xl">
   <div class="pointer-events-none absolute inset-0 z-[5]">
     <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
     <div class="absolute inset-0 ring-1 ring-black/5"></div>
@@ -18,19 +17,15 @@
   <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-[900ms] ease-out" aria-hidden="true">
     <img src="{% static 'images/carrusel1.jpg' %}" alt="Joyas a medida"
          class="absolute inset-0 h-full w-full object-cover will-change-transform animate-kenburns-slow" />
-    <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-6 sm:px-10 md:px-16 max-w-2xl">
+    <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-5 sm:px-10 md:px-16 max-w-2xl">
       <span class="hero-kicker inline-block text-xs tracking-[.2em] uppercase text-white/80">Hecho a mano en Chile</span>
-      <h2 class="hero-title text-4xl md:text-5xl font-bold text-white mt-2 drop-shadow leading-tight">
+      <h2 class="hero-title text-3xl sm:text-4xl md:text-5xl font-bold text-white mt-1 drop-shadow leading-tight">
         Joyas hechas a medida con alma y oficio
       </h2>
-      <p class="hero-subtitle text-white/95 text-base md:text-lg mt-4">
+      <p class="hero-subtitle text-white/95 text-sm sm:text-base md:text-lg mt-3">
         Diseños únicos y reparaciones que perduran en el tiempo.
       </p>
-
-      <a href="#catalogo"
-         class="hero-cta group inline-flex items-center gap-2 mt-6 rounded-full border border-white/30 bg-white/10 px-5 py-2.5
-                text-white backdrop-blur-[2px] transition-all duration-300
-                hover:bg-white hover:text-gray-900 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50">
+      <a href="#catalogo" class="hero-cta group inline-flex items-center gap-2 mt-5 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-white backdrop-blur-[2px] transition-all duration-300 hover:bg-white hover:text-gray-900 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50">
         Solicitar diseño personalizado
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -41,19 +36,11 @@
   <div class="carousel-item absolute inset-0 opacity-0 transition-opacity duration-[900ms] ease-out" aria-hidden="true">
     <img src="{% static 'images/carrusel2.jpg' %}" alt="Hecho a tu medida"
          class="absolute inset-0 h-full w-full object-cover will-change-transform animate-kenburns-slow" />
-    <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-6 sm:px-10 md:px-16 max-w-2xl">
+    <div class="relative z-10 h-full w-full flex flex-col justify-center items-start text-left px-5 sm:px-10 md:px-16 max-w-2xl">
       <span class="hero-kicker inline-block text-xs tracking-[.2em] uppercase text-white/80">Oficio orfebre</span>
-      <h2 class="hero-title text-4xl md:text-5xl font-bold text-white mt-2 drop-shadow leading-tight">
-        Hecho a tu medida
-      </h2>
-      <p class="hero-subtitle text-white/95 text-base md:text-lg mt-4">
-        Creamos y restauramos piezas que cuentan tu historia.
-      </p>
-
-      <a href="#catalogo"
-         class="hero-cta group inline-flex items-center gap-2 mt-6 rounded-full border border-white/30 bg-white/10 px-5 py-2.5
-                text-white backdrop-blur-[2px] transition-all duration-300
-                hover:bg-white hover:text-gray-900 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50">
+      <h2 class="hero-title text-3xl sm:text-4xl md:text-5xl font-bold text-white mt-1 drop-shadow leading-tight">Hecho a tu medida</h2>
+      <p class="hero-subtitle text-white/95 text-sm sm:text-base md:text-lg mt-3">Creamos y restauramos piezas que cuentan tu historia.</p>
+      <a href="#catalogo" class="hero-cta group inline-flex items-center gap-2 mt-5 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-white backdrop-blur-[2px] transition-all duration-300 hover:bg-white hover:text-gray-900 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-white/50">
         Comprar ahora
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -61,75 +48,72 @@
   </div>
 
   <!-- Dots -->
-  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2" id="carousel-dots">
+  <div class="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2" id="carousel-dots">
     <button class="h-2.5 w-2.5 rounded-full bg-white/80 ring-1 ring-white/50 opacity-40 scale-90 transition-all" data-slide="0"></button>
     <button class="h-2.5 w-2.5 rounded-full bg-white/80 ring-1 ring-white/50 opacity-40 scale-90 transition-all" data-slide="1"></button>
   </div>
 </div>
-
 {% endblock %}
 
 {% block content %}
-<!-- Catálogo de productos tipo slider con flechas -->
-<div id="catalogo" class="w-full pt-2 pb-6 relative overflow-x-hidden">
-  <div class="text-center mb-5">
-    <h2 class="text-gray-900 font-semibold tracking-tight text-[22px] md:text-[28px] leading-tight">
+<!-- ===== CATÁLOGO ===== -->
+<section id="catalogo" class="w-full pb-6">
+  <div class="text-center mb-4 sm:mb-6">
+    <h2 class="text-gray-900 font-semibold tracking-tight text-[20px] sm:text-[22px] md:text-[28px] leading-tight">
       Catálogo de productos
     </h2>
-    <div class="mx-auto mt-2 h-[3px] w-16 rounded bg-gradient-to-r from-[#5e0013] to-[#c7233c]"></div>
+    <div class="mx-auto mt-2 h-[3px] w-14 sm:w-16 rounded bg-gradient-to-r from-[#5e0013] to-[#c7233c]"></div>
   </div>
 
-  <!-- Contenedor con flechas -->
-  <div class="relative w-full overflow-x-hidden">
-    
-    <!-- Botón izquierda -->
+  <!-- Slider universal (móvil y escritorio) -->
+  <div class="relative">
+    <!-- Flecha izquierda -->
     <button id="prevBtn"
-            class="absolute left-2 top-1/2 -translate-y-1/2 z-50 bg-[#5e0013] text-white rounded-full p-2 hover:bg-[#83041e] shadow-md">
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+            aria-label="Anterior"
+            class="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#5e0013] text-white rounded-full p-2 md:p-3 shadow-md active:scale-95">
+      <svg class="h-5 w-5 md:h-6 md:w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
       </svg>
     </button>
 
-    <!-- Slider -->
-    <div id="product-slider"
-         class="flex overflow-x-auto space-x-4 sm:space-x-5 scrollbar-hide py-3 scroll-smooth w-full">
-      <p class="text-gray-500 ml-6">Cargando productos...</p>
+    <!-- Rail de productos -->
+    <div id="product-rail"
+         class="flex overflow-x-auto gap-3 md:gap-4 scrollbar-hide py-1 px-3 scroll-smooth w-full snap-x snap-mandatory">
+      <p class="text-gray-500">Cargando productos...</p>
     </div>
 
-    <!-- Botón derecha -->
+    <!-- Flecha derecha -->
     <button id="nextBtn"
-            class="absolute right-2 top-1/2 -translate-y-1/2 z-50 bg-[#5e0013] text-white rounded-full p-2 hover:bg-[#83041e] shadow-md">
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+            aria-label="Siguiente"
+            class="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#5e0013] text-white rounded-full p-2 md:p-3 shadow-md active:scale-95">
+      <svg class="h-5 w-5 md:h-6 md:w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
       </svg>
     </button>
-
   </div>
-</div>
+</section>
 
-<!-- Ocultar scrollbar -->
+<!-- Ocultar scrollbar (todas las plataformas) -->
 <style>
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 
-<!-- Servicios destacados (full-bleed lateral) -->
-<section id="servicios-destacados" class="relative w-full py-4 bg-gradient-to-b from-white to-gray-50/60 scroll-mt-[120px]">
+<!-- ===== SERVICIOS DESTACADOS ===== -->
+<section id="servicios-destacados" class="relative w-full py-6 bg-gradient-to-b from-white to-gray-50/60">
   <div class="max-w-7xl mx-auto px-4">
-    <div class="text-center mb-12">
+    <div class="text-center mb-8">
       <span class="inline-block text-[11px] tracking-widest uppercase text-[#5e0013]/70">Nuestros servicios</span>
-      <h3 class="mt-2 text-3xl md:text-4xl font-semibold text-gray-800">Servicios destacados</h3>
+      <h3 class="mt-1 text-2xl md:text-4xl font-semibold text-gray-800">Servicios destacados</h3>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-      <!-- Pedidos (izquierda) -->
+      <!-- Pedidos -->
       <div class="bleed-left">
         <a href="{% url 'store:quienes_somos' %}#personalizados"
-           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
-           aria-label="Ver más sobre pedidos exclusivos">
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40">
           <img src="{% static 'images/servicios/pedidos.jpg' %}" alt="Pedidos exclusivos"
-               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
-               loading="lazy" decoding="async">
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform" loading="lazy" decoding="async">
           <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
           <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
             <div class="panel translate-y-0 opacity-100 transition duration-300">
@@ -145,14 +129,12 @@
         </a>
       </div>
 
-      <!-- Argollas (derecha) -->
+      <!-- Argollas -->
       <div class="bleed-right">
         <a href="{% url 'store:quienes_somos' %}#argollas"
-           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
-           aria-label="Ver más sobre argollas de matrimonio">
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40">
           <img src="{% static 'images/servicios/argollas.jpg' %}" alt="Argollas de matrimonio"
-               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
-               loading="lazy" decoding="async">
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform" loading="lazy" decoding="async">
           <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
           <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
             <div class="panel translate-y-0 opacity-100 transition duration-300">
@@ -168,14 +150,12 @@
         </a>
       </div>
 
-      <!-- Reparaciones (izquierda) -->
+      <!-- Reparaciones -->
       <div class="bleed-left">
         <a href="{% url 'store:quienes_somos' %}#reparaciones"
-           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
-           aria-label="Ver más sobre reparaciones">
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40">
           <img src="{% static 'images/servicios/reparaciones.jpg' %}" alt="Reparaciones"
-               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
-               loading="lazy" decoding="async">
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform" loading="lazy" decoding="async">
           <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
           <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
             <div class="panel translate-y-0 opacity-100 transition duration-300">
@@ -191,14 +171,12 @@
         </a>
       </div>
 
-      <!-- Garantía & Ajustes (derecha) -->
+      <!-- Garantía -->
       <div class="bleed-right">
         <a href="{% url 'store:quienes_somos' %}#garantia"
-           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40"
-           aria-label="Ver más sobre garantía y ajustes">
+           class="block w-full service-card service-reveal group relative h-[430px] sm:h-[480px] rounded-2xl overflow-hidden shadow-lg ring-1 ring-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#5e0013]/40">
           <img src="{% static 'images/servicios/garantia.jpg' %}" alt="Garantía y ajustes"
-               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform"
-               loading="lazy" decoding="async">
+               class="absolute inset-0 w-full h-full object-cover transform-gpu scale-[1.02] transition-transform duration-700 ease-out group-hover:scale-105 will-change-transform" loading="lazy" decoding="async">
           <div class="overlay absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent transition-opacity duration-500"></div>
           <div class="absolute inset-x-0 bottom-0 p-6 md:p-7">
             <div class="panel translate-y-0 opacity-100 transition duration-300">
@@ -217,48 +195,30 @@
   </div>
 </section>
 
-<!-- Sección Somos -->
+<!-- ===== SOMOS ===== -->
 <section id="somos" class="w-full flex flex-col lg:flex-row mt-10 overflow-hidden">
   <!-- Imagen -->
   <div class="w-full lg:w-1/2 h-[520px] relative group reveal">
-    <img
-      src="{% static 'images/somos-joyas.jpg' %}"
-      alt="Joyas en arena"
-      class="w-full h-full object-cover transform-gpu scale-[1.02] group-hover:scale-105 transition-transform duration-700 ease-out will-change-transform"
-      loading="lazy" decoding="async"
-    />
+    <img src="{% static 'images/somos-joyas.jpg' %}" alt="Joyas en arena"
+         class="w-full h-full object-cover transform-gpu scale-[1.02] group-hover:scale-105 transition-transform duration-700 ease-out will-change-transform"
+         loading="lazy" decoding="async" />
     <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-700"></div>
   </div>
 
   <!-- Texto -->
-  <div
-    class="w-full lg:w-1/2 h-[520px] relative bg-cover bg-center reveal-x"
-    style="background-image: url('{% static 'images/somos-fondo.jpg' %}');"
-  >
+  <div class="w-full lg:w-1/2 h-[520px] relative bg-cover bg-center reveal-x"
+       style="background-image: url('{% static 'images/somos-fondo.jpg' %}');">
     <div class="absolute inset-0 bg-[#5e0013]/60"></div>
-
     <div class="relative z-10 text-white p-8 md:p-10 flex flex-col justify-center h-full">
       <span class="inline-flex items-center gap-2 text-[11px] tracking-widest uppercase text-[#F5E6CA]/90 mb-1">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a1 1 0 0 1 .894.553l2.382 4.76 5.255.764a1 1 0 0 1 .554 1.704l-3.8 3.703.896 5.224a1 1 0 0 1-1.45 1.054L12 18.769l-4.681 2.463a1 1 0 0 1-1.45-1.054l.897-5.224-3.8-3.703A1 1 0 0 1 3.47 8.077l5.255-.764 2.382-4.76A1 1 0 0 1 12 2Z"/></svg>
         Más de medio siglo de oficio
       </span>
-
       <h3 class="text-2xl md:text-3xl font-semibold mb-3">SOMOS</h3>
-
-      <p class="mb-3 text-white/95 leading-relaxed">
-        Nuestras obras son una delicada combinación de esmero, talento y experiencia.
-      </p>
-      <p class="mb-3 text-white/95 leading-relaxed">
-        Descubra las piezas de joyería que creamos hoy con pasión y con la trayectoria del legado acumulado por más de medio siglo en el oficio de la orfebrería.
-      </p>
-      <p class="mb-6 text-white/95 leading-relaxed">
-        Trabajamos con un equipo de maestros orfebres de excelencia para materializar diseños únicos que lo acompañarán a través del tiempo, reflejando su historia.
-      </p>
-
-      <a
-        href="{% url 'store:quienes_somos' %}"
-        class="inline-flex items-center gap-2 border border-white/90 px-5 py-2 rounded-lg text-white/95 hover:bg-white hover:text-[#5e0013] transition-colors duration-300 w-fit focus:outline-none focus:ring-2 focus:ring-white/60"
-      >
+      <p class="mb-3 text-white/95 leading-relaxed">Nuestras obras son una delicada combinación de esmero, talento y experiencia.</p>
+      <p class="mb-3 text-white/95 leading-relaxed">Descubra las piezas de joyería que creamos hoy con pasión y con la trayectoria del legado acumulado por más de medio siglo en el oficio de la orfebrería.</p>
+      <p class="mb-6 text-white/95 leading-relaxed">Trabajamos con un equipo de maestros orfebres de excelencia para materializar diseños únicos que lo acompañarán a través del tiempo, reflejando su historia.</p>
+      <a href="{% url 'store:quienes_somos' %}" class="inline-flex items-center gap-2 border border-white/90 px-5 py-2 rounded-lg text-white/95 hover:bg-white hover:text-[#5e0013] transition-colors duration-300 w-fit focus:outline-none focus:ring-2 focus:ring-white/60">
         Ver más
         <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -266,98 +226,181 @@
   </div>
 </section>
 
-<!-- Beneficios -->
-<section class="bg-white border-top border-gray-300 py-10">
+<!-- Beneficios Artesanales -->
+<section class="bg-white border-t border-gray-300 py-10">
   <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-sm text-gray-700">
+    
+    <!-- Atención personalizada -->
     <div>
       <i class="fas fa-hands-helping text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Atención Personalizada</h4>
       <p>Te acompañamos en cada paso para crear la pieza perfecta, única y significativa.</p>
     </div>
+
+    <!-- Hecho a mano -->
     <div>
       <i class="fas fa-gem text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Joyas Hechas a Mano</h4>
       <p>Diseños elaborados artesanalmente con precisión, esmero y tradición orfebre.</p>
     </div>
+
+    <!-- Entrega especial -->
     <div>
       <i class="fas fa-box-open text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Presentación con Historia</h4>
       <p>Cada pieza se entrega en estuche o caja.</p>
     </div>
+
+    <!-- Garantía -->
     <div>
       <i class="fas fa-shield-alt text-2xl text-[#5e0013] mb-2"></i>
       <h4 class="font-bold mb-1">Garantía y Reparaciones</h4>
       <p>Respaldamos nuestro trabajo con garantía y servicio de mantenimiento especializado.</p>
     </div>
+
   </div>
 </section>
 
-<!-- ===== SCRIPTS ESPECÍFICOS DE ESTA PÁGINA ===== -->
-
-<!-- Carrusel hero -->
+<!-- ===== JS de la página ===== -->
 <script>
-  const slides = document.querySelectorAll('.carousel-item');
-  const dots = document.querySelectorAll('#carousel-dots button');
-  let currentSlide = 0;
+  // Hero
+  (function(){
+    const slides = document.querySelectorAll('.carousel-item');
+    const dots = document.querySelectorAll('#carousel-dots button');
+    let i = 0;
+    function show(n){
+      slides.forEach((s,idx)=>{
+        const on = idx===n;
+        s.style.opacity = on ? '1':'0';
+        s.setAttribute('aria-hidden', String(!on));
+        s.classList.toggle('is-active', on);
+      });
+      dots.forEach((d,idx)=>{
+        const on = idx===n;
+        d.classList.toggle('opacity-90', on);
+        d.classList.toggle('scale-100', on);
+        d.classList.toggle('opacity-40', !on);
+        d.classList.toggle('scale-90', !on);
+      });
+      i = n;
+    }
+    setInterval(()=>show((i+1)%slides.length), 10000);
+    show(0);
+  })();
 
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      const active = i === index;
-      slide.style.opacity = active ? '1' : '0';
-      slide.setAttribute('aria-hidden', String(!active));
-      slide.classList.toggle('is-active', active);
-    });
 
-    dots.forEach((dot, i) => {
-      const active = i === index;
-      dot.classList.toggle('opacity-90', active);
-      dot.classList.toggle('scale-100', active);
-      dot.classList.toggle('opacity-40', !active);
-      dot.classList.toggle('scale-90', !active);
-    });
+  // Catálogo universal (slider en todas las vistas)
+  (function(){
+    const API   = document.body?.dataset?.apiBaseUrl || '';
+    const rail  = document.getElementById('product-rail');
+    const prev  = document.getElementById('prevBtn');
+    const next  = document.getElementById('nextBtn');
 
-    currentSlide = index;
-  }
+    function fmtCLP(v){
+      try { return new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(v||0); }
+      catch(e){ return '$' + Math.round(v||0); }
+    }
 
-  setInterval(() => {
-    const next = (currentSlide + 1) % slides.length;
-    showSlide(next);
-  }, 10000);
+    // Card responsive para slider horizontal
+    function cardHTML(p){
+      const img  = p.imagen_url || "{% static 'images/no-image.jpg' %}";
+      const name = (p.nombre || '').replace(/"/g,'&quot;');
+      const desc = (p.descripcion || '').slice(0, 90);
+      return `
+        <a href="/store/producto/${p.id}/"
+           class="group block snap-start">
+          <div class="aspect-square w-full min-w-[210px] sm:min-w-[230px] md:min-w-[260px] lg:min-w-[280px]
+                      overflow-hidden rounded-xl bg-white border border-gray-200 shadow-sm">
+            <img src="${img}" alt="${name}"
+                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" decoding="async">
+          </div>
+          <div class="mt-2 flex items-start justify-between gap-2">
+            <div class="pr-1">
+              <h3 class="text-[15px] md:text-base font-semibold text-gray-900 leading-snug line-clamp-2">${name}</h3>
+              <p class="mt-0.5 text-[12px] md:text-[13px] text-gray-600 line-clamp-2">${desc}</p>
+            </div>
+            <p class="text-gray-900 font-extrabold text-[14px] md:text-[15px] whitespace-nowrap">
+              ${fmtCLP(p.precio_actual)}
+            </p>
+          </div>
+        </a>`;
+    }
 
-  showSlide(0);
-</script>
-<style>
-  @keyframes kenburns-slow { from { transform: scale(1.04); } to { transform: scale(1.08); } }
-  .animate-kenburns-slow { animation: kenburns-slow 18s ease-in-out infinite alternate; }
+    async function load(){
+      if(!API){ console.warn('API base vacía'); return; }
+      try{
+        const params = new URLSearchParams(location.search);
+        const qs = [];
+        if (params.get('categoria')) qs.push('categoria='+params.get('categoria'));
+        if (params.get('marca'))     qs.push('marca='+params.get('marca'));
+        const url = `${API}productos/${qs.length ? '?' + qs.join('&') : ''}`;
 
-  .hero-kicker, .hero-title, .hero-subtitle, .hero-cta {
-    opacity: 0; transform: translateY(10px);
-  }
-  .carousel-item.is-active .hero-kicker,
-  .carousel-item.is-active .hero-title,
-  .carousel-item.is-active .hero-subtitle,
-  .carousel-item.is-active .hero-cta {
-    opacity: 1; transform: none;
-  }
-  .carousel-item.is-active .hero-kicker   { transition: opacity .6s ease, transform .6s ease; transition-delay: .05s; }
-  .carousel-item.is-active .hero-title    { transition: opacity .6s ease, transform .6s ease; transition-delay: .12s; }
-  .carousel-item.is-active .hero-subtitle { transition: opacity .6s ease, transform .6s ease; transition-delay: .20s; }
-  .carousel-item.is-active .hero-cta      { transition: opacity .6s ease, transform .6s ease; transition-delay: .30s; }
-</style>
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const data = await res.json();
+        const items = Array.isArray(data) ? data : (data.results || []);
 
-<!-- Animaciones de revelado -->
-<style>
-  #somos .reveal { opacity: 0; transform: translateY(18px); }
-  #somos .reveal-x { opacity: 0; transform: translateX(24px); }
-  #somos .is-visible {
-    opacity: 1; transform: none;
-    transition: opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1);
-    will-change: opacity, transform;
-  }
-</style>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
+        if(!items.length){
+          rail.innerHTML = '<p class="text-center text-gray-500 px-3">No hay productos disponibles.</p>';
+          return;
+        }
+        rail.innerHTML = items.map(cardHTML).join('');
+      } catch (e){
+        rail.innerHTML = `<p class="text-center text-red-600 px-3">Error: ${e.message}</p>`;
+      }
+    }
+
+    // Scroll por “pantalla” del rail (90% del ancho visible)
+    function scrollAmount(){
+      return Math.max(240, Math.floor(rail.clientWidth * 0.9));
+    }
+    prev?.addEventListener('click', () => rail.scrollBy({ left: -scrollAmount(), behavior: 'smooth' }));
+    next?.addEventListener('click', () => rail.scrollBy({ left:  scrollAmount(),  behavior: 'smooth' }));
+
+    document.addEventListener('DOMContentLoaded', load);
+  })();
+
+
+  // ===== Revelado de tarjetas de servicios (FIX de visibilidad) =====
+  (function(){
+    const items = document.querySelectorAll('#servicios-destacados .service-reveal');
+    if (!items.length) return;
+
+    // Fallback: si no hay IO, mostrar de inmediato
+    const showAll = () => items.forEach(el => el.classList.add('is-in'));
+
+    if (!('IntersectionObserver' in window)) {
+      showAll();
+      return;
+    }
+
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    items.forEach(el => io.observe(el));
+
+    // Seguridad: si por alguna razón no se llamó IO, mostrar tras un tiempo
+    setTimeout(showAll, 1500);
+  })();
+
+  // ===== Revelado sección SOMOS (FIX de visibilidad) =====
+  (function(){
     const targets = document.querySelectorAll('#somos .reveal, #somos .reveal-x');
+    if (!targets.length) return;
+
+    const showAll = () => targets.forEach(t => t.classList.add('is-visible'));
+
+    if (!('IntersectionObserver' in window)) {
+      showAll();
+      return;
+    }
+
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -366,12 +409,27 @@
         }
       });
     }, { threshold: 0.2 });
+
     targets.forEach(t => io.observe(t));
-  });
+    setTimeout(showAll, 1500);
+  })();
 </script>
 
-<!-- Servicios destacados: reveal -->
+<!-- Estilos -->
 <style>
+  @keyframes kenburns-slow { from { transform: scale(1.04); } to { transform: scale(1.08); } }
+  .animate-kenburns-slow { animation: kenburns-slow 18s ease-in-out infinite alternate; }
+  .hero-kicker, .hero-title, .hero-subtitle, .hero-cta { opacity: 0; transform: translateY(10px); }
+  .carousel-item.is-active .hero-kicker,
+  .carousel-item.is-active .hero-title,
+  .carousel-item.is-active .hero-subtitle,
+  .carousel-item.is-active .hero-cta { opacity: 1; transform: none; }
+  .carousel-item.is-active .hero-kicker{ transition: opacity .5s, transform .5s; transition-delay: .05s; }
+  .carousel-item.is-active .hero-title { transition: opacity .6s, transform .6s; transition-delay: .12s; }
+  .carousel-item.is-active .hero-subtitle{ transition: opacity .6s, transform .6s; transition-delay: .20s; }
+  .carousel-item.is-active .hero-cta   { transition: opacity .6s, transform .6s; transition-delay: .30s; }
+
+  /* Service reveal (por defecto oculto; JS añade .is-in) */
   .service-reveal { opacity: 0; transform: translateY(14px) scale(.98); }
   .service-reveal.is-in { opacity: 1; transform: none; transition: opacity .6s ease, transform .6s cubic-bezier(.22,.61,.36,1); }
   .service-card .panel { opacity: 1; transform: none; }
@@ -390,10 +448,13 @@
     35% { opacity: 1; }
     100% { transform: rotate(20deg) translate(140%, 20%); opacity: 0; }
   }
-</style>
 
-<!-- Ajustes de sangrado lateral -->
-<style>
+  /* SOMOS reveal */
+  #somos .reveal { opacity: 0; transform: translateY(18px); }
+  #somos .reveal-x { opacity: 0; transform: translateX(24px); }
+  #somos .is-visible { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s cubic-bezier(.22,.61,.36,1); will-change: opacity, transform; }
+
+  /* Bleed en pantallas amplias */
   :root { --container-max: 80rem; --container-pad: 1rem; }
   @media (min-width: 768px) {
     .bleed-left  { margin-left:  calc(-1 * ((max(0px, 100vw - var(--container-max)) / 2) + var(--container-pad))); }
@@ -401,97 +462,11 @@
   }
 </style>
 
-<!-- Carga de productos (único bloque) -->
-<script>
-  (function(){
-    const productSlider = document.getElementById('product-slider');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-
-    function fmtCLP(v){
-      try { return new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(v||0); }
-      catch(e){ return '$' + Math.round(v||0); }
-    }
-
-    function cardHTML(p){
-      const img  = p.imagen_url || "{% static 'images/no-image.jpg' %}";
-      const desc = (p.descripcion || '').slice(0, 110);
-      return `
-        <a href="/store/producto/${p.id}/" class="group block min-w-[210px] sm:min-w-[240px] md:min-w-[260px]">
-          <img src="${img}" alt="${(p.nombre || '').replace(/"/g,'&quot;')}"
-               class="h-[240px] sm:h-[280px] md:h-[300px] w-full object-cover rounded-md shadow transition-transform duration-300 group-hover:scale-[1.02]"
-               loading="lazy" decoding="async"/>
-          <div class="mt-3 flex justify-between gap-3">
-            <div class="pr-1">
-              <h3 class="text-[15px] md:text-[16px] font-semibold text-gray-900 group-hover:underline group-hover:underline-offset-4">
-                ${p.nombre || ''}
-              </h3>
-              <p class="mt-1 text-[13px] md:text-[14px] text-gray-700 font-medium leading-snug">
-                ${desc}
-              </p>
-            </div>
-            <p class="text-gray-900 font-extrabold text-[14px] md:text-[16px] whitespace-nowrap">
-              ${fmtCLP(p.precio_actual)}
-            </p>
-          </div>
-        </a>
-      `;
-    }
-
-    async function cargarProductosDesdeAPI(){
-      const API = document.body?.dataset?.apiBaseUrl || '';
-      if (!API) { console.warn('API base vacía'); return; }
-
-      try{
-        const params = new URLSearchParams(location.search);
-        const qs = [];
-        if (params.get('categoria')) qs.push('categoria=' + params.get('categoria'));
-        if (params.get('marca')) qs.push('marca=' + params.get('marca'));
-
-        const url = `${API}productos/${qs.length ? '?' + qs.join('&') : ''}`;
-        const res = await fetch(url);
-        if(!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        const items = Array.isArray(data) ? data : (data.results || []);
-
-        if(!items.length){
-          productSlider.innerHTML = '<p class="text-center text-gray-500 ml-6">No hay productos disponibles.</p>';
-          return;
-        }
-
-        productSlider.innerHTML = items.map(cardHTML).join('');
-      } catch (e){
-        productSlider.innerHTML = `<p class="text-center text-red-600 ml-6">Error: ${e.message}</p>`;
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-      cargarProductosDesdeAPI();
-      prevBtn.addEventListener('click', () => productSlider.scrollBy({ left: -350, behavior: 'smooth' }));
-      nextBtn.addEventListener('click', () => productSlider.scrollBy({ left: 350, behavior: 'smooth' }));
-    });
-  })();
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const items = document.querySelectorAll('#servicios-destacados .service-reveal');
-
-    // Fallback si no hay IntersectionObserver
-    if (!('IntersectionObserver' in window) || !items.length) {
-      items.forEach(el => el.classList.add('is-in'));
-      return;
-    }
-
-    const io = new IntersectionObserver((entries, obs) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('is-in'); // <- esto quita la opacidad 0
-          obs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.2 });
-
-    items.forEach(el => io.observe(el));
-  });
-</script>
+<!-- Fallback sin JS: mostrar secciones igualmente -->
+<noscript>
+  <style>
+    #servicios-destacados .service-reveal{opacity:1!important; transform:none!important}
+    #somos .reveal, #somos .reveal-x{opacity:1!important; transform:none!important}
+  </style>
+</noscript>
 {% endblock %}
