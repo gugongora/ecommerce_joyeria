@@ -1,4 +1,8 @@
 # en .gitignore
+venv/
 .env
 *.env
 /staticfiles/
+media/
+node_modules/
+__pycache__/

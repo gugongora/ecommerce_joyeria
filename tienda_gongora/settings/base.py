@@ -31,9 +31,7 @@ ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
 
 
 # API base URL (ajústalo según el entorno)
-API_BASE_URL = os.getenv("API_BASE_URL", "http://127.0.0.1:8000/api/")
-# API_BASE_URL = "http://52.55.129.100/api/" # API AWS
-
+API_BASE_URL = env("API_BASE_URL", default="http://127.0.0.1:8000/api/")
 
 
 # Application definition
@@ -119,7 +117,6 @@ MIDDLEWARE = [
     'tienda_gongora.middleware.RedirectByGroupMiddleware',
 ]
 
-ROOT_URLCONF = 'tienda_gongora.urls'
 
 TEMPLATES = [
     {
@@ -151,19 +148,6 @@ DATABASES = {
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
     )
 }
-
-
-#Base de datos en AWS
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.mysql',
-#        'NAME': 'tienda_gongora',
-#        'USER': 'django_user',
-#        'PASSWORD': 'clave_segura_2025',
-#        'HOST': 'localhost',
-#        'PORT': '3306',
-#    }
-#} 
 
 
 # Password validation
@@ -242,6 +226,9 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@localhost")
 
 # Seguridad común (prod endurece)
 CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+
+SECURE_PROXY_SSL_HEADER = tuple(env("SECURE_PROXY_SSL_HEADER", default="HTTP_X_FORWARDED_PROTO,https").split(","))
+USE_X_FORWARDED_HOST = env.bool("USE_X_FORWARDED_HOST", default=True)
 
 # Logging básico; prod lo refuerza
 LOGGING = {
