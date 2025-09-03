@@ -31,17 +31,9 @@ jobs:
           # pip install flake8
           # flake8 .
 
-      - name: Run Django checks
-        env:
-          # Config mínima para checks sin DB productiva
-          DJANGO_SETTINGS_MODULE: tienda_gongora.settings
-        run: |
-          python - <<'PY'
-          import os
-          os.environ.setdefault("DJANGO_SETTINGS_MODULE","tienda_gongora.settings")
-          from django.core.management import call_command
-          call_command("check")
-          PY
+     - name: Run Django checks
+       run: |
+          python manage.py check --deploy
 
       # (Opcional) Añade tus tests cuando estén listos
       # - name: Run tests
