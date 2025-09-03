@@ -1,3 +1,4 @@
+Probando CI/CD
 # ✨ Ecommerce Joyería Góngora
 
 Este es el proyecto de **tienda online de Joyería Góngora**, creado con Django y Tailwind.  
